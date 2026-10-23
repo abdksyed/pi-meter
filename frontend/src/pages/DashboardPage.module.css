@@ -1,0 +1,92 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-9);
+  min-width: 0;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-9);
+  align-items: stretch;
+  min-width: 0;
+}
+
+.hero {
+  grid-column: span 7;
+  min-width: 0;
+}
+
+.composition {
+  grid-column: span 5;
+  min-width: 0;
+}
+
+.metrics,
+.chart,
+.recent {
+  grid-column: span 12;
+  min-width: 0;
+}
+
+.model,
+.project {
+  grid-column: span 6;
+  min-width: 0;
+}
+
+.empty {
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+}
+
+@media (max-width: 1199px) {
+  .hero,
+  .composition {
+    grid-column: span 12;
+  }
+
+  .model,
+  .project {
+    grid-column: span 6;
+  }
+}
+
+@media (max-width: 899px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--space-7);
+  }
+
+  .hero,
+  .composition,
+  .metrics,
+  .chart,
+  .recent {
+    grid-column: span 4;
+  }
+
+  .model,
+  .project {
+    grid-column: span 2;
+  }
+}
+
+@media (max-width: 639px) {
+  .grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: var(--space-6);
+  }
+
+  .hero,
+  .composition,
+  .metrics,
+  .chart,
+  .model,
+  .project,
+  .recent {
+    grid-column: span 1;
+  }
+}
