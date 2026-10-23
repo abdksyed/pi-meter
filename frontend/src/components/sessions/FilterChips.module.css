@@ -1,0 +1,67 @@
+.root {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: 100%;
+  padding: 2px var(--space-2) 2px var(--space-4);
+  border: var(--border-subtle);
+  border-radius: var(--radius-sm);
+  background-color: var(--color-surface);
+}
+
+.label {
+  color: var(--color-ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.value {
+  overflow: hidden;
+  max-width: 260px;
+  color: var(--color-ink-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--radius-xs);
+  color: var(--color-ink-muted);
+}
+
+.remove:hover {
+  background-color: var(--color-surface-subtle);
+  color: var(--color-ink);
+}
+
+.remove svg {
+  width: 10px;
+  height: 10px;
+}
+
+.clear {
+  padding: 2px var(--space-2);
+  color: var(--color-ink-secondary);
+  font-size: var(--text-sm);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.clear:hover {
+  color: var(--color-ink);
+}

@@ -1,0 +1,96 @@
+.panel {
+  min-height: 100%;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-6);
+}
+
+.track {
+  display: flex;
+  gap: 1px;
+  height: 8px;
+  overflow: hidden;
+  border-radius: 2px;
+  background-color: var(--color-surface-subtle);
+}
+
+.segment {
+  display: block;
+  height: 100%;
+}
+
+.legend {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.legendRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.legendRow dt {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: var(--color-ink-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.legendRow dd {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+}
+
+.amount {
+  color: var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.percent {
+  min-width: 44px;
+  color: var(--color-ink-muted);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  font-variant-numeric: tabular-nums lining-nums;
+  text-align: right;
+}
+
+.note {
+  color: var(--color-ink-muted);
+  font-size: var(--text-2xs);
+  line-height: var(--leading-snug);
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+
+@media (min-width: 640px) and (max-width: 1199px) {
+  .legend {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--space-3) var(--space-9);
+  }
+}

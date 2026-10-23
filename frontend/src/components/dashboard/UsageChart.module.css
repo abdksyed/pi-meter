@@ -1,0 +1,202 @@
+.panel {
+  min-width: 0;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.metricToggle {
+  display: flex;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-muted);
+}
+
+.metricButton {
+  height: 24px;
+  padding: 0 var(--space-5);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.metricButton:hover {
+  color: var(--color-ink);
+}
+
+.metricActive {
+  border-color: var(--color-control-border);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: var(--weight-semibold);
+}
+
+.chartFrame {
+  position: relative;
+  width: 100%;
+  max-width: 100%;
+  height: var(--layout-chart);
+  min-width: 0;
+  min-height: var(--layout-chart);
+  overflow: hidden;
+}
+
+.chart {
+  width: 100%;
+  max-width: 100%;
+  height: 100%;
+  min-width: 0;
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3) var(--space-6);
+  padding-top: var(--space-2);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-xs);
+  color: var(--color-ink-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 1.4;
+}
+
+button.legendItem:hover {
+  background-color: var(--color-surface-subtle);
+  color: var(--color-ink);
+}
+
+.legendOff {
+  color: var(--color-ink-faint);
+  text-decoration: line-through;
+}
+
+.swatch {
+  width: 8px;
+  height: 8px;
+  border-radius: 2px;
+}
+
+.lineSwatch {
+  width: 16px;
+  height: 1.5px;
+  background-color: var(--color-ink);
+}
+
+.dataTable {
+  border-top: var(--border-subtle);
+  padding-top: var(--space-4);
+}
+
+.dataTable summary {
+  color: var(--color-ink-muted);
+  font-size: var(--text-2xs);
+  cursor: pointer;
+}
+
+.dataTable summary:hover {
+  color: var(--color-ink);
+}
+
+.tableScroll {
+  max-height: 280px;
+  margin-top: var(--space-4);
+  overflow: auto;
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+}
+
+.tableScroll table {
+  font-size: var(--text-xs);
+}
+
+.tableScroll th,
+.tableScroll td {
+  height: 32px;
+  padding: 0 var(--space-5);
+  white-space: nowrap;
+}
+
+.tooltip {
+  min-width: 200px;
+  padding: var(--space-5) var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius-md);
+  background-color: var(--chart-tooltip-bg);
+  box-shadow: var(--shadow-popover);
+}
+
+.tooltipTitle {
+  margin-bottom: var(--space-3);
+  color: var(--color-ink-muted);
+  font-size: var(--text-2xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+}
+
+.tooltipRows {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
+}
+
+.tooltipRow {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-6);
+  color: var(--color-ink-secondary);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+}
+
+.tooltipRow dt {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.tooltipRow dd {
+  margin: 0;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.tooltipDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 2px;
+}
+
+.tooltipTotal {
+  margin-top: 2px;
+  padding-top: var(--space-2);
+  border-top: var(--border-subtle);
+  color: var(--color-ink);
+}
+
+@media (max-width: 639px) {
+  .chartFrame {
+    height: var(--layout-chart-sm);
+    min-height: var(--layout-chart-sm);
+  }
+
+  .metricButton {
+    height: 32px;
+  }
+}

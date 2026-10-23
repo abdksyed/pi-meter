@@ -1,0 +1,65 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  min-width: 0;
+  padding: var(--space-8) var(--space-9);
+  border-left: var(--border-subtle);
+}
+
+.card:first-child {
+  border-left: 0;
+}
+
+.value {
+  margin: 0;
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  font-size: var(--text-xl);
+  font-weight: var(--weight-semibold);
+  font-variant-numeric: tabular-nums lining-nums;
+  line-height: 1.1;
+  letter-spacing: var(--tracking-snug);
+}
+
+.lead {
+  font-family: var(--font-serif);
+  font-size: 28px;
+  font-weight: var(--weight-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+.detail {
+  margin: 0;
+  color: var(--color-ink-muted);
+  font-size: var(--text-sm);
+  line-height: var(--leading-snug);
+}
+
+@media (max-width: 899px) {
+  .card {
+    border-top: var(--border-subtle);
+  }
+
+  .card:nth-child(odd) {
+    border-left: 0;
+  }
+
+  .card:nth-child(-n + 2) {
+    border-top: 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .card {
+    padding: var(--space-6);
+  }
+
+  .value {
+    font-size: var(--text-lg);
+  }
+
+  .lead {
+    font-size: var(--text-xl);
+  }
+}

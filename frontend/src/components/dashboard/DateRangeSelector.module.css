@@ -1,0 +1,137 @@
+.root {
+  position: relative;
+  min-width: 0;
+}
+
+.segmented {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px;
+  border-radius: var(--radius-md);
+  background-color: var(--color-surface-muted);
+}
+
+.segment {
+  height: 28px;
+  padding: 0 var(--space-5);
+  border: var(--border-width) solid transparent;
+  border-radius: var(--radius-sm);
+  color: var(--color-ink-secondary);
+  font-size: var(--text-md);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.segment:hover {
+  background-color: var(--color-surface-subtle);
+  color: var(--color-ink);
+}
+
+.segment.active {
+  border-color: var(--color-control-border);
+  background-color: var(--color-surface);
+  color: var(--color-ink);
+  font-weight: var(--weight-semibold);
+}
+
+.segment.open {
+  border-color: var(--color-control-border);
+}
+
+.compact {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.select {
+  width: auto;
+  min-width: 148px;
+  padding-right: var(--space-8);
+  font-size: var(--text-md);
+  cursor: pointer;
+}
+
+.customPanel {
+  position: absolute;
+  top: calc(100% + var(--space-3));
+  left: 0;
+  z-index: var(--z-popover);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+  width: min(340px, 88vw);
+  padding: var(--space-6);
+  border: var(--border-hairline);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-surface);
+  box-shadow: var(--shadow-popover);
+}
+
+.compact .customPanel {
+  left: auto;
+  right: 0;
+}
+
+.customFields {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-5);
+}
+
+.customLabel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  color: var(--color-ink-secondary);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-medium);
+}
+
+.customLabel input {
+  width: 100%;
+  padding: 0 var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+}
+
+.customError {
+  color: var(--color-error-text);
+  font-size: var(--text-sm);
+}
+
+.customActions {
+  display: flex;
+  gap: var(--space-4);
+}
+
+.customActions button {
+  flex: 1;
+}
+
+@media (max-width: 639px) {
+  .segmented {
+    overflow-x: auto;
+    max-width: 100%;
+  }
+
+  .segment,
+  .select {
+    height: var(--layout-touch);
+  }
+
+  .segment {
+    padding: 0 var(--space-5);
+  }
+
+  .customPanel {
+    position: fixed;
+    top: auto;
+    right: var(--space-8);
+    bottom: var(--space-8);
+    left: var(--space-8);
+    width: auto;
+  }
+}

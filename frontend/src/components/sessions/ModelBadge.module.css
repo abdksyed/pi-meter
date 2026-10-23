@@ -1,0 +1,40 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  padding: 2px var(--space-3);
+  overflow: hidden;
+  border-radius: var(--radius-xs);
+  background-color: var(--color-neutral-bg);
+  color: var(--color-neutral-text);
+  font-family: var(--font-mono);
+  font-size: var(--text-2xs);
+  line-height: 1.5;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge[data-tone="user"] {
+  background-color: var(--color-user-bg);
+  color: var(--color-user-text);
+}
+
+.badge[data-tone="assistant"] {
+  background-color: var(--color-assistant-bg);
+  color: var(--color-assistant-text);
+}
+
+.badge[data-tone="tool"] {
+  background-color: var(--color-tool-bg);
+  color: var(--color-tool-text);
+}
+
+.badge[data-tone="system"] {
+  background-color: var(--color-system-bg);
+  color: var(--color-system-text);
+}
+
+.badge[data-tone="success"] {
+  background-color: var(--color-success-bg);
+  color: var(--color-success-text);
+}
