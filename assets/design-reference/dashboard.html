@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=1440, height=1000">
+<title>Pi Meter — Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  :root {
+    --bg-canvas: #F7F6F3;
+    --bg-surface: #FFFFFF;
+    --text-primary: #20211F;
+    --text-secondary: #6B6D69;
+    --text-tertiary: #989A94;
+    --border-hairline: #E5E3DE;
+    --border-subtle: #ECEAE4;
+    
+    /* Semantic pastel accents */
+    --accent-blue: #D6E4F0;
+    --accent-blue-text: #24466B;
+    --accent-green: #DAEAD8;
+    --accent-green-text: #23532C;
+    --accent-yellow: #F6ECCC;
+    --accent-yellow-text: #5E4E16;
+
+    /* Composition bar muted tints */
+    --bar-output: #20211F;
+    --bar-input: #62655F;
+    --bar-cache-write: #BDC8B8;
+    --bar-cache-read: #C7D8E6;
+
+    --font-serif: 'Fraunces', Georgia, serif;
+    --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    --font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+  }
+
+  html, body {
+    width: 1440px;
+    height: 1000px;
+    overflow: hidden;
+    background-color: var(--bg-canvas);
+    color: var(--text-primary);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  /* Browser frame container */
+  .browser-frame {
+    width: 1440px;
+    height: 1000px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-canvas);
+  }
+
+  /* Browser window faux top bar */
+  .window-header {
+    height: 38px;
+    background-color: #EDEBE6;
+    border-bottom: 1px solid var(--border-hairline);
+    display: flex;
+    align-items: center;
+    padding: 0 16px;
+    gap: 14px;
+    user-select: none;
+  }
+
+  .window-controls {
+    display: flex;
+    gap: 6px;
+  }
+  .window-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background-color: #D3D0C8;
+    border: 1px solid #C4C0B6;
+  }
+
+  .address-bar {
+    flex: 1;
+    max-width: 520px;
+    margin: 0 auto;
+    height: 24px;
+    background: #F7F6F3;
+    border: 1px solid var(--border-hairline);
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    letter-spacing: -0.01em;
+  }
+
+  .window-badge {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  /* Main Application Shell */
+  .app-layout {
+    flex: 1;
+    display: flex;
+    height: calc(1000px - 38px);
+  }
+
+  /* Left Rail */
+  .left-rail {
+    width: 200px;
+    border-right: 1px solid var(--border-hairline);
+    background-color: var(--bg-canvas);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 0 20px 0;
+    justify-content: space-between;
+  }
+
+  .rail-top {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .brand-block {
+    padding: 0 24px 28px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .brand-mark {
+    font-family: var(--font-serif);
+    font-size: 20px;
+    font-weight: 400;
+    line-height: 1;
+    color: var(--text-primary);
+  }
+
+  .brand-name {
+    font-family: var(--font-sans);
+    font-size: 13.5px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+    text-transform: lowercase;
+  }
+
+  .nav-group {
+    display: flex;
+    flex-direction: column;
+    padding: 0 12px;
+    gap: 2px;
+  }
+
+  .nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 7px 12px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: none;
+  }
+
+  .nav-item.active {
+    color: var(--text-primary);
+    background-color: #EBE9E3;
+    font-weight: 600;
+  }
+
+  .nav-bullet {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background-color: transparent;
+  }
+  .nav-item.active .nav-bullet {
+    background-color: var(--text-primary);
+  }
+
+  .rail-bottom {
+    padding: 0 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .sync-badge {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-secondary);
+  }
+
+  .sync-indicator {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background-color: #559E67;
+  }
+
+  .app-version {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  /* Main Workspace */
+  .main-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+    background-color: var(--bg-canvas);
+  }
+
+  /* Top Bar */
+  .top-bar {
+    height: 58px;
+    border-bottom: 1px solid var(--border-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 32px;
+    background-color: var(--bg-canvas);
+  }
+
+  .top-left {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+  }
+
+  .page-title {
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text-primary);
+  }
+
+  .page-subtext {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .top-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  /* Date Range Tabs */
+  .date-tabs {
+    display: inline-flex;
+    background: #EBE8E1;
+    padding: 2.5px;
+    border-radius: 6px;
+    border: 1px solid var(--border-hairline);
+  }
+
+  .tab-btn {
+    border: none;
+    background: transparent;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+    padding: 4px 10px;
+    border-radius: 4px;
+    cursor: default;
+  }
+
+  .tab-btn.active {
+    background: var(--bg-surface);
+    color: var(--text-primary);
+    font-weight: 600;
+  }
+
+  .btn-refresh {
+    background-color: var(--text-primary);
+    color: #FFFFFF;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 500;
+    padding: 6px 14px;
+    border-radius: 5px;
+    cursor: default;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: -0.01em;
+  }
+
+  .btn-refresh svg {
+    width: 12px;
+    height: 12px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  /* Dashboard Content Area */
+  .dashboard-body {
+    flex: 1;
+    padding: 24px 32px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  /* Card surface primitive */
+  .panel {
+    background-color: var(--bg-surface);
+    border: 1px solid var(--border-hairline);
+    border-radius: 8px;
+  }
+
+  /* Upper Row: Left Anchor Metrics + Right Usage Chart */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 460px 1fr;
+    gap: 20px;
+    height: 290px;
+  }
+
+  /* Metrics Panel */
+  .metrics-card {
+    padding: 22px 24px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .metric-headline-group {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .metric-kicker {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+    margin-bottom: 6px;
+  }
+
+  .total-cost-num {
+    font-family: var(--font-serif);
+    font-size: 52px;
+    font-weight: 300;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    margin-bottom: 8px;
+  }
+
+  .total-tokens-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--text-secondary);
+  }
+
+  .token-highlight {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  .metric-delta-tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 4px;
+    background-color: var(--accent-green);
+    color: var(--accent-green-text);
+    font-weight: 500;
+  }
+
+  /* Understated stacked cost composition bar */
+  .composition-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .comp-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 11.5px;
+    color: var(--text-secondary);
+  }
+
+  .comp-title {
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .stacked-bar {
+    width: 100%;
+    height: 12px;
+    display: flex;
+    border-radius: 3px;
+    overflow: hidden;
+    background: #EBE8E1;
+  }
+
+  .bar-seg {
+    height: 100%;
+  }
+
+  .comp-legend {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 12px;
+  }
+
+  .legend-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .legend-left {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    color: var(--text-secondary);
+  }
+
+  .legend-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 1px;
+  }
+
+  .legend-val {
+    color: var(--text-primary);
+    font-weight: 500;
+  }
+
+  /* Right Chart Panel */
+  .chart-card {
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .chart-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 12px;
+  }
+
+  .chart-title-block {
+    display: flex;
+    align-items: baseline;
+    gap: 8px;
+  }
+
+  .chart-title {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .chart-subtitle {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .chart-stat-chip {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+    background: #F7F6F3;
+    padding: 3px 8px;
+    border-radius: 4px;
+    border: 1px solid var(--border-hairline);
+  }
+
+  .chart-viewport {
+    flex: 1;
+    position: relative;
+    width: 100%;
+  }
+
+  svg.chart-svg {
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  /* Lower Grid: Model Breakdown + Project Breakdown + Recent Sessions */
+  .lower-grid {
+    display: grid;
+    grid-template-columns: 320px 300px 1fr;
+    gap: 20px;
+    height: 520px;
+  }
+
+  .sub-panel {
+    padding: 18px 20px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .panel-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 14px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .panel-heading {
+    font-size: 12.5px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .panel-meta {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+
+  /* Compact Table Rows */
+  .table-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .model-row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .model-row-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 12px;
+  }
+
+  .model-name {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-primary);
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 180px;
+  }
+
+  .model-cost-group {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  .model-cost {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  .model-pct {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+  }
+
+  .progress-bg {
+    width: 100%;
+    height: 4px;
+    background: #EFECE6;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background-color: var(--text-primary);
+    border-radius: 2px;
+  }
+
+  /* Project breakdown items */
+  .project-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 0;
+    border-bottom: 1px solid #F5F3ED;
+  }
+
+  .project-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    max-width: 180px;
+  }
+
+  .project-slug {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-primary);
+    letter-spacing: -0.01em;
+  }
+
+  .project-path {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .project-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 1px;
+  }
+
+  .project-cost {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--text-primary);
+  }
+
+  .project-tokens {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-secondary);
+  }
+
+  /* Recent Sessions Table */
+  .sessions-panel {
+    padding: 18px 22px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .sessions-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+  }
+
+  .sessions-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 10.5px;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--text-tertiary);
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .sessions-table td {
+    padding: 10px 0;
+    border-bottom: 1px solid #F3F1EC;
+    vertical-align: middle;
+  }
+
+  .sessions-table tr:last-child td {
+    border-bottom: none;
+  }
+
+  .session-title-cell {
+    max-width: 200px;
+  }
+
+  .session-title {
+    font-weight: 500;
+    color: var(--text-primary);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    letter-spacing: -0.01em;
+  }
+
+  .session-time {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    color: var(--text-tertiary);
+    margin-top: 1px;
+  }
+
+  .session-proj-badge {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 6px;
+    background: #EFECE5;
+    border-radius: 3px;
+    color: var(--text-secondary);
+    display: inline-block;
+  }
+
+  .session-model-pill {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: #F3F1EC;
+    color: var(--text-secondary);
+    display: inline-block;
+  }
+
+  .session-model-pill.claude {
+    background: #EBF1F7;
+    color: #2D4C6E;
+  }
+
+  .session-model-pill.gemini {
+    background: #EDF5EE;
+    color: #27542E;
+  }
+
+  .session-tokens {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-secondary);
+  }
+
+  .session-cost {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-align: right;
+  }
+</style>
+</head>
+<body>
+
+<div class="browser-frame">
+  <!-- Window Header / Browser Chrome Frame -->
+  <div class="window-header">
+    <div class="window-controls">
+      <div class="window-dot"></div>
+      <div class="window-dot"></div>
+      <div class="window-dot"></div>
+    </div>
+    <div class="address-bar">
+      <span>localhost:4170 · Pi Meter</span>
+    </div>
+    <div class="window-badge">1440 × 1000</div>
+  </div>
+
+  <!-- Main Application Body -->
+  <div class="app-layout">
+    <!-- Narrow Left Rail -->
+    <aside class="left-rail">
+      <div class="rail-top">
+        <div class="brand-block">
+          <span class="brand-mark">π</span>
+          <span class="brand-name">pi meter</span>
+        </div>
+
+        <nav class="nav-group">
+          <a href="#" class="nav-item active">
+            <span class="nav-bullet"></span>
+            <span>Dashboard</span>
+          </a>
+          <a href="#" class="nav-item">
+            <span class="nav-bullet"></span>
+            <span>Sessions</span>
+          </a>
+          <a href="#" class="nav-item">
+            <span class="nav-bullet"></span>
+            <span>Settings</span>
+          </a>
+        </nav>
+      </div>
+
+      <div class="rail-bottom">
+        <div class="sync-badge">
+          <span class="sync-indicator"></span>
+          <span>Synced 2m ago</span>
+        </div>
+        <div class="app-version">v0.1.2 · 48 sessions</div>
+      </div>
+    </aside>
+
+    <!-- Main Stage -->
+    <main class="main-stage">
+      <!-- Top Bar -->
+      <header class="top-bar">
+        <div class="top-left">
+          <h1 class="page-title">Usage overview</h1>
+          <span class="page-subtext">~/.pi/agent/sessions</span>
+        </div>
+
+        <div class="top-actions">
+          <div class="date-tabs">
+            <button class="tab-btn">Today</button>
+            <button class="tab-btn active">7 days</button>
+            <button class="tab-btn">30 days</button>
+            <button class="tab-btn">All time</button>
+          </div>
+
+          <button class="btn-refresh">
+            <svg viewBox="0 0 24 24"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            <span>Refresh</span>
+          </button>
+        </div>
+      </header>
+
+      <!-- Dashboard Grid -->
+      <div class="dashboard-body">
+        
+        <!-- Hero Grid: Cost / Tokens & Composition + Daily Cost Line Chart -->
+        <section class="hero-grid">
+          <!-- Total Cost Anchor & Stacked Composition -->
+          <div class="panel metrics-card">
+            <div class="metric-headline-group">
+              <span class="metric-kicker">Total Cost (7 days)</span>
+              <div class="total-cost-num">$42.85</div>
+              <div class="total-tokens-row">
+                <span class="token-highlight">14,284,520</span>
+                <span>tokens</span>
+                <span class="metric-delta-tag">+12.4%</span>
+              </div>
+            </div>
+
+            <!-- Understated Black and Muted-Pastel Composition Bar -->
+            <div class="composition-section">
+              <div class="comp-label-row">
+                <span class="comp-title">Cost Composition</span>
+                <span style="font-family: var(--font-mono); font-size: 11px; color: var(--text-tertiary);">4 cost dimensions</span>
+              </div>
+
+              <!-- Stacked Composition Bar -->
+              <div class="stacked-bar">
+                <div class="bar-seg" style="width: 48%; background-color: var(--bar-output);" title="Output: $20.57 (48%)"></div>
+                <div class="bar-seg" style="width: 32%; background-color: var(--bar-input);" title="Input: $13.71 (32%)"></div>
+                <div class="bar-seg" style="width: 12%; background-color: var(--bar-cache-write);" title="Cache Write: $5.14 (12%)"></div>
+                <div class="bar-seg" style="width: 8%; background-color: var(--bar-cache-read);" title="Cache Read: $3.43 (8%)"></div>
+              </div>
+
+              <!-- Understated Legend -->
+              <div class="comp-legend">
+                <div class="legend-item">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: var(--bar-output);"></span>
+                    <span>Output</span>
+                  </div>
+                  <span class="legend-val">$20.57 <span style="color: var(--text-tertiary); font-weight: 400;">(48%)</span></span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: var(--bar-input);"></span>
+                    <span>Input</span>
+                  </div>
+                  <span class="legend-val">$13.71 <span style="color: var(--text-tertiary); font-weight: 400;">(32%)</span></span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: var(--bar-cache-write);"></span>
+                    <span>Cache write</span>
+                  </div>
+                  <span class="legend-val">$5.14 <span style="color: var(--text-tertiary); font-weight: 400;">(12%)</span></span>
+                </div>
+                <div class="legend-item">
+                  <div class="legend-left">
+                    <span class="legend-dot" style="background: var(--bar-cache-read);"></span>
+                    <span>Cache read</span>
+                  </div>
+                  <span class="legend-val">$3.43 <span style="color: var(--text-tertiary); font-weight: 400;">(8%)</span></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Daily Cost Line Chart Panel -->
+          <div class="panel chart-card">
+            <div class="chart-header">
+              <div class="chart-title-block">
+                <span class="chart-title">Daily Cost</span>
+                <span class="chart-subtitle">Oct 16 – Oct 22 · micro-unit precision</span>
+              </div>
+              <div class="chart-stat-chip">
+                <span>Avg $6.12 / day</span>
+              </div>
+            </div>
+
+            <div class="chart-viewport">
+              <svg class="chart-svg" viewBox="0 0 780 195" preserveAspectRatio="none">
+                <!-- Hairline Horizontal Grid Lines -->
+                <line x1="40" y1="20" x2="760" y2="20" stroke="#EFECE6" stroke-width="1" />
+                <line x1="40" y1="65" x2="760" y2="65" stroke="#EFECE6" stroke-width="1" />
+                <line x1="40" y1="110" x2="760" y2="110" stroke="#EFECE6" stroke-width="1" />
+                <line x1="40" y1="155" x2="760" y2="155" stroke="#EFECE6" stroke-width="1" />
+
+                <!-- Y Axis Labels -->
+                <text x="32" y="24" font-family="'JetBrains Mono', monospace" font-size="10" fill="#989A94" text-anchor="end">$10</text>
+                <text x="32" y="69" font-family="'JetBrains Mono', monospace" font-size="10" fill="#989A94" text-anchor="end">$7.5</text>
+                <text x="32" y="114" font-family="'JetBrains Mono', monospace" font-size="10" fill="#989A94" text-anchor="end">$5.0</text>
+                <text x="32" y="159" font-family="'JetBrains Mono', monospace" font-size="10" fill="#989A94" text-anchor="end">$2.5</text>
+
+                <!-- Daily Cost Line (Oct 16 - 22) -->
+                <!-- Points: 
+                     Oct 16 (x=80,  y=125 -> $4.15)
+                     Oct 17 (x=190, y=95  -> $5.80)
+                     Oct 18 (x=300, y=140 -> $3.35)
+                     Oct 19 (x=410, y=55  -> $8.10)
+                     Oct 20 (x=520, y=85  -> $6.40)
+                     Oct 21 (x=630, y=40  -> $8.95)
+                     Oct 22 (x=740, y=105 -> $6.10)
+                -->
+                <polyline 
+                  fill="none" 
+                  stroke="#20211F" 
+                  stroke-width="1.5" 
+                  points="80,125 190,95 300,140 410,55 520,85 630,40 740,105" 
+                />
+
+                <!-- Small Square Data Points -->
+                <rect x="77.5" y="122.5" width="5" height="5" fill="#20211F" />
+                <rect x="187.5" y="92.5" width="5" height="5" fill="#20211F" />
+                <rect x="297.5" y="137.5" width="5" height="5" fill="#20211F" />
+                <rect x="407.5" y="52.5" width="5" height="5" fill="#20211F" />
+                <rect x="517.5" y="82.5" width="5" height="5" fill="#20211F" />
+                <!-- Peak square with subtle marker -->
+                <rect x="627.5" y="37.5" width="5" height="5" fill="#20211F" />
+                <rect x="737.5" y="102.5" width="5" height="5" fill="#20211F" />
+
+                <!-- Callout pill for peak day (Oct 21) -->
+                <rect x="604" y="14" width="52" height="18" rx="3" fill="#20211F" />
+                <text x="630" y="26" font-family="'JetBrains Mono', monospace" font-size="9.5" fill="#FFFFFF" text-anchor="middle" font-weight="500">$8.95</text>
+
+                <!-- X Axis Labels -->
+                <text x="80" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 16</text>
+                <text x="190" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 17</text>
+                <text x="300" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 18</text>
+                <text x="410" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 19</text>
+                <text x="520" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 20</text>
+                <text x="630" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#6B6D69" text-anchor="middle">Oct 21</text>
+                <text x="740" y="180" font-family="'JetBrains Mono', monospace" font-size="10" fill="#20211F" font-weight="600" text-anchor="middle">Oct 22</text>
+              </svg>
+            </div>
+          </div>
+        </section>
+
+        <!-- Lower Grid: Models, Projects, and Recent Sessions -->
+        <section class="lower-grid">
+          
+          <!-- Column 1: Model Breakdown -->
+          <div class="panel sub-panel">
+            <div class="panel-top">
+              <span class="panel-heading">Cost by Model</span>
+              <span class="panel-meta">4 models</span>
+            </div>
+
+            <div class="table-list">
+              <!-- Item 1 -->
+              <div class="model-row">
+                <div class="model-row-header">
+                  <span class="model-name">claude-3-7-sonnet</span>
+                  <div class="model-cost-group">
+                    <span class="model-cost">$25.10</span>
+                    <span class="model-pct">58.6%</span>
+                  </div>
+                </div>
+                <div class="progress-bg">
+                  <div class="progress-bar-fill" style="width: 58.6%;"></div>
+                </div>
+              </div>
+
+              <!-- Item 2 -->
+              <div class="model-row">
+                <div class="model-row-header">
+                  <span class="model-name">claude-3-5-sonnet</span>
+                  <div class="model-cost-group">
+                    <span class="model-cost">$9.82</span>
+                    <span class="model-pct">22.9%</span>
+                  </div>
+                </div>
+                <div class="progress-bg">
+                  <div class="progress-bar-fill" style="width: 22.9%; background-color: #555752;"></div>
+                </div>
+              </div>
+
+              <!-- Item 3 -->
+              <div class="model-row">
+                <div class="model-row-header">
+                  <span class="model-name">gemini-2.5-pro</span>
+                  <div class="model-cost-group">
+                    <span class="model-cost">$4.75</span>
+                    <span class="model-pct">11.1%</span>
+                  </div>
+                </div>
+                <div class="progress-bg">
+                  <div class="progress-bar-fill" style="width: 11.1%; background-color: #838580;"></div>
+                </div>
+              </div>
+
+              <!-- Item 4 -->
+              <div class="model-row">
+                <div class="model-row-header">
+                  <span class="model-name">gpt-4o</span>
+                  <div class="model-cost-group">
+                    <span class="model-cost">$3.18</span>
+                    <span class="model-pct">7.4%</span>
+                  </div>
+                </div>
+                <div class="progress-bg">
+                  <div class="progress-bar-fill" style="width: 7.4%; background-color: #B2B0A8;"></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Monospace footnote -->
+            <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-tertiary);">
+              <span>Input: $0.003/1k</span>
+              <span>Output: $0.015/1k</span>
+            </div>
+          </div>
+
+          <!-- Column 2: Project Breakdown -->
+          <div class="panel sub-panel">
+            <div class="panel-top">
+              <span class="panel-heading">Usage by Project</span>
+              <span class="panel-meta">cwd group</span>
+            </div>
+
+            <div class="table-list" style="gap: 2px;">
+              <!-- Project 1 -->
+              <div class="project-row">
+                <div class="project-left">
+                  <span class="project-slug">pi-meter</span>
+                  <span class="project-path">~/coding/pi-meter</span>
+                </div>
+                <div class="project-right">
+                  <span class="project-cost">$21.40</span>
+                  <span class="project-tokens">7.2M tokens</span>
+                </div>
+              </div>
+
+              <!-- Project 2 -->
+              <div class="project-row">
+                <div class="project-left">
+                  <span class="project-slug">agent-runtime</span>
+                  <span class="project-path">~/work/agent-runtime</span>
+                </div>
+                <div class="project-right">
+                  <span class="project-cost">$12.85</span>
+                  <span class="project-tokens">4.1M tokens</span>
+                </div>
+              </div>
+
+              <!-- Project 3 -->
+              <div class="project-row">
+                <div class="project-left">
+                  <span class="project-slug">evals-suite</span>
+                  <span class="project-path">~/bench/evals-suite</span>
+                </div>
+                <div class="project-right">
+                  <span class="project-cost">$5.40</span>
+                  <span class="project-tokens">1.8M tokens</span>
+                </div>
+              </div>
+
+              <!-- Project 4 -->
+              <div class="project-row" style="border-bottom: none;">
+                <div class="project-left">
+                  <span class="project-slug">doc-indexer</span>
+                  <span class="project-path">~/tools/doc-indexer</span>
+                </div>
+                <div class="project-right">
+                  <span class="project-cost">$3.20</span>
+                  <span class="project-tokens">1.1M tokens</span>
+                </div>
+              </div>
+            </div>
+
+            <div style="margin-top: auto; padding-top: 14px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; font-family: var(--font-mono); font-size: 10.5px; color: var(--text-tertiary);">
+              <span>Top directory: pi-meter</span>
+              <span>49.9%</span>
+            </div>
+          </div>
+
+          <!-- Column 3: Recent Sessions -->
+          <div class="panel sessions-panel">
+            <div class="panel-top">
+              <span class="panel-heading">Recent Sessions</span>
+              <span class="panel-meta">Showing 5 of 48</span>
+            </div>
+
+            <table class="sessions-table">
+              <thead>
+                <tr>
+                  <th>Session / Prompt</th>
+                  <th>Project</th>
+                  <th>Model</th>
+                  <th>Tokens</th>
+                  <th style="text-align: right;">Cost</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="session-title-cell">
+                    <div class="session-title">Add SQLite parser and file mtime sync</div>
+                    <div class="session-time">14m ago · 26 entries</div>
+                  </td>
+                  <td><span class="session-proj-badge">pi-meter</span></td>
+                  <td><span class="session-model-pill claude">claude-3-7</span></td>
+                  <td class="session-tokens">412,890</td>
+                  <td class="session-cost">$1.48</td>
+                </tr>
+
+                <tr>
+                  <td class="session-title-cell">
+                    <div class="session-title">Implement timeseries API with day buckets</div>
+                    <div class="session-time">1h 12m ago · 44 entries</div>
+                  </td>
+                  <td><span class="session-proj-badge">pi-meter</span></td>
+                  <td><span class="session-model-pill claude">claude-3-7</span></td>
+                  <td class="session-tokens">824,100</td>
+                  <td class="session-cost">$2.96</td>
+                </tr>
+
+                <tr>
+                  <td class="session-title-cell">
+                    <div class="session-title">Benchmark memory consumption in agent loop</div>
+                    <div class="session-time">3h 40m ago · 18 entries</div>
+                  </td>
+                  <td><span class="session-proj-badge">agent-rt</span></td>
+                  <td><span class="session-model-pill gemini">gemini-2.5</span></td>
+                  <td class="session-tokens">310,400</td>
+                  <td class="session-cost">$0.45</td>
+                </tr>
+
+                <tr>
+                  <td class="session-title-cell">
+                    <div class="session-title">Fix compaction truncation bug in JSONL reader</div>
+                    <div class="session-time">5h 22m ago · 31 entries</div>
+                  </td>
+                  <td><span class="session-proj-badge">pi-meter</span></td>
+                  <td><span class="session-model-pill claude">claude-3-5</span></td>
+                  <td class="session-tokens">540,200</td>
+                  <td class="session-cost">$1.12</td>
+                </tr>
+
+                <tr>
+                  <td class="session-title-cell">
+                    <div class="session-title">Evaluate multi-turn reasoning on code evals</div>
+                    <div class="session-time">Yesterday · 62 entries</div>
+                  </td>
+                  <td><span class="session-proj-badge">evals</span></td>
+                  <td><span class="session-model-pill claude">claude-3-7</span></td>
+                  <td class="session-tokens">1,120,500</td>
+                  <td class="session-cost">$4.20</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div style="margin-top: auto; padding-top: 12px; border-top: 1px solid var(--border-subtle); display: flex; justify-content: space-between; align-items: center;">
+              <span style="font-family: var(--font-mono); font-size: 10.5px; color: var(--text-tertiary);">Showing recent activity</span>
+              <a href="#" style="font-size: 11.5px; color: var(--text-primary); text-decoration: none; font-weight: 500;">View all sessions →</a>
+            </div>
+          </div>
+
+        </section>
+
+      </div>
+    </main>
+  </div>
+</div>
+
+</body>
+</html>

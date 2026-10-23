@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=780, height=1100, initial-scale=1.0">
+<title>Pi Meter — Session Detail (780x1100 UI Reference)</title>
+<link rel="stylesheet" href="fonts.css">
+<style>
+  /* 
+    PI METER — SESSION DETAIL PAGE DESIGN REFERENCE
+    Aesthetics: Premium utilitarian minimalism, Swiss-inspired information architecture.
+    Color Palette: Warm bone background #F7F6F3, charcoal text, flat surfaces, hairline 1px borders.
+    Strictly NO gradients, NO box shadows, NO glassmorphism, NO oversized rounded corners.
+  */
+
+  :root {
+    --bg-bone: #F7F6F3;
+    --surface-white: #FFFFFF;
+    --surface-bone-alt: #F1EFEA;
+    --border-hairline: #DFDCD5;
+    --border-subtle: #EBE8E1;
+    --border-dark: #C9C5BC;
+
+    /* Typographic ink levels */
+    --text-charcoal: #17191A;
+    --text-body: #25282B;
+    --text-muted: #676B70;
+    --text-tertiary: #8C9096;
+
+    /* Semantic pale tints */
+    --pale-blue-bg: #EEF4F9;
+    --pale-blue-border: #C8DCE8;
+    --pale-blue-tag: #235878;
+
+    --pale-lavender-bg: #F4F0F8;
+    --pale-lavender-border: #DCD0E8;
+    --pale-lavender-tag: #5E3C85;
+
+    --pale-yellow-bg: #FAF5E5;
+    --pale-yellow-border: #E8DDBC;
+    --pale-yellow-tag: #786116;
+
+    --pale-red-bg: #FCEDEC;
+    --pale-red-border: #EFCBC8;
+    --pale-red-tag: #9A2422;
+
+    /* Typography rules */
+    --font-serif: 'Newsreader', Georgia, Cambria, serif;
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: 'JetBrains Mono', "Fira Code", monospace;
+  }
+
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  html, body {
+    width: 780px;
+    height: 1100px;
+    overflow: hidden;
+    background-color: var(--bg-bone);
+    color: var(--text-body);
+    font-family: var(--font-sans);
+    font-size: 13px;
+    line-height: 1.45;
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+  }
+
+  /* 780x1100 CANVAS CONTAINER */
+  .viewport-frame {
+    width: 780px;
+    height: 1100px;
+    display: flex;
+    flex-direction: column;
+    background-color: var(--bg-bone);
+    position: relative;
+    border-right: 1px solid var(--border-hairline);
+    user-select: none;
+  }
+
+  /* TOP BAR */
+  .top-bar {
+    height: 48px;
+    min-height: 48px;
+    background-color: var(--bg-bone);
+    border-bottom: 1px solid var(--border-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+  }
+
+  .nav-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .back-btn {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-charcoal);
+    background: #FFFFFF;
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .back-btn:hover {
+    background: #FAF9F6;
+  }
+
+  .brand-group {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .brand-title {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-charcoal);
+  }
+
+  .live-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-muted);
+    background: var(--surface-bone-alt);
+    border: 1px solid var(--border-subtle);
+    padding: 2px 7px;
+    border-radius: 2px;
+  }
+
+  .live-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #2F9444;
+    border-radius: 50%;
+  }
+
+  .nav-right {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .sync-timestamp {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--text-tertiary);
+  }
+
+  .refresh-btn {
+    font-family: var(--font-sans);
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-charcoal);
+    background: #FFFFFF;
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 5px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+  }
+
+  .refresh-icon {
+    font-size: 13px;
+    line-height: 1;
+    color: var(--text-muted);
+  }
+
+  /* MAIN WORKSPACE */
+  .workspace {
+    flex: 1;
+    padding: 20px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  /* SESSION HEADER */
+  .session-header {
+    border-bottom: 1px solid var(--border-hairline);
+    padding-bottom: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .session-headline-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+
+  .session-title {
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--text-charcoal);
+    line-height: 1.25;
+  }
+
+  .session-status-pill {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-muted);
+    background: #FFFFFF;
+    border: 1px solid var(--border-hairline);
+    padding: 3px 8px;
+    border-radius: 2px;
+    white-space: nowrap;
+  }
+
+  .session-meta-breadcrumbs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--text-muted);
+  }
+
+  .meta-cwd {
+    color: var(--text-charcoal);
+    font-weight: 500;
+  }
+
+  .meta-sep {
+    color: var(--border-dark);
+  }
+
+  /* TWO-COLUMN METRICS GRID */
+  .cost-metrics-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+  }
+
+  .metric-tile {
+    background-color: var(--surface-white);
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .tile-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 6px;
+  }
+
+  /* TOTAL COST NUMERAL — SERIF ONLY */
+  .serif-total-amount {
+    font-family: var(--font-serif);
+    font-size: 38px;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    color: var(--text-charcoal);
+    margin: 4px 0 12px 0;
+    font-feature-settings: "tnum" 1;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+
+  .serif-currency-symbol {
+    font-size: 26px;
+    font-style: italic;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .cost-components-list {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 7px 12px;
+    padding-top: 10px;
+    border-top: 1px solid var(--border-subtle);
+  }
+
+  .cost-item {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+  }
+
+  .cost-item-name {
+    font-size: 9.5px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--text-tertiary);
+  }
+
+  .cost-item-val {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--text-charcoal);
+  }
+
+  /* RIGHT TILE: METRIC PAIRS */
+  .metric-stats-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    margin-top: 4px;
+  }
+
+  .metric-keyval-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 11.5px;
+    border-bottom: 1px solid #F5F3ED;
+    padding-bottom: 5px;
+  }
+
+  .metric-keyval-row:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .key-title {
+    color: var(--text-muted);
+  }
+
+  .val-figure {
+    font-family: var(--font-mono);
+    font-weight: 500;
+    color: var(--text-charcoal);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .cache-pct-tag {
+    font-size: 10px;
+    font-weight: 600;
+    padding: 1px 5px;
+    border-radius: 2px;
+    background: #EFECE3;
+    color: var(--text-charcoal);
+  }
+
+  /* TIMELINE SECTION CONTROLS */
+  .timeline-header-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 2px;
+  }
+
+  .timeline-title-wrap {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .timeline-title {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .timeline-badge {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+
+  .timeline-filter-buttons {
+    display: flex;
+    gap: 6px;
+  }
+
+  .filter-btn {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-muted);
+    background: #FFFFFF;
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 3px 8px;
+    cursor: pointer;
+  }
+
+  .filter-btn-error {
+    color: var(--pale-red-tag);
+    border-color: var(--pale-red-border);
+    background: #FDF4F4;
+    font-weight: 500;
+  }
+
+  /* TIMELINE STREAM ENTRIES */
+  .timeline-container {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  /* 1. SYSTEM METADATA (Pale Yellow) */
+  .turn-system-meta {
+    background-color: var(--pale-yellow-bg);
+    border: 1px solid var(--pale-yellow-border);
+    border-radius: 2px;
+    padding: 7px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--pale-yellow-tag);
+  }
+
+  .system-pill {
+    font-weight: 700;
+    font-size: 9.5px;
+    letter-spacing: 0.06em;
+    background: #EEDB9A;
+    color: #4C3C06;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-right: 8px;
+  }
+
+  .system-timestamp {
+    font-size: 10.5px;
+    color: #8C7730;
+  }
+
+  /* 2. USER MESSAGE (Pale Blue) */
+  .turn-user-box {
+    background-color: var(--pale-blue-bg);
+    border: 1px solid var(--pale-blue-border);
+    border-radius: 2px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .turn-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .role-indicator {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .role-user {
+    color: var(--pale-blue-tag);
+  }
+
+  .role-assistant {
+    color: var(--pale-lavender-tag);
+  }
+
+  .turn-timestamp {
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+
+  .turn-body {
+    font-size: 13.5px;
+    line-height: 1.5;
+    color: var(--text-charcoal);
+  }
+
+  .turn-body code {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    background: #E0EBF3;
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: #17384D;
+  }
+
+  /* 3. ASSISTANT MESSAGE & TOOL GROUP (Pale Lavender) */
+  .turn-assistant-box {
+    background-color: var(--pale-lavender-bg);
+    border: 1px solid var(--pale-lavender-border);
+    border-radius: 2px;
+    padding: 12px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .assistant-stats-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--pale-lavender-tag);
+  }
+
+  .model-tag {
+    font-weight: 600;
+    background: #E6D8F1;
+    color: #48286A;
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  .turn-body-assistant code {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    background: #E8DFF2;
+    padding: 1px 4px;
+    border-radius: 2px;
+    color: #391D58;
+  }
+
+  /* TOOL ROWS CONTAINER */
+  .tool-execution-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-top: 2px;
+  }
+
+  /* Collapsed Tool Row */
+  .tool-row-flat {
+    background-color: var(--surface-white);
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 7px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+
+  .tool-row-main {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--text-charcoal);
+  }
+
+  .chevron-icon {
+    font-size: 8px;
+    color: var(--text-tertiary);
+  }
+
+  .tool-badge {
+    font-weight: 600;
+    color: var(--text-charcoal);
+    background: var(--surface-bone-alt);
+    padding: 1px 6px;
+    border-radius: 2px;
+  }
+
+  .tool-filepath {
+    color: var(--text-muted);
+  }
+
+  .tool-meta-aside {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .exec-duration {
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+
+  .expand-pill-btn {
+    font-size: 10px;
+    font-family: var(--font-mono);
+    font-weight: 600;
+    color: var(--text-charcoal);
+    background: #F4F2EC;
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    padding: 1px 6px;
+    cursor: pointer;
+  }
+
+  /* Expanded Tool Row */
+  .tool-row-expanded-block {
+    background-color: var(--surface-white);
+    border: 1px solid var(--border-hairline);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-expanded-header {
+    padding: 7px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border-bottom: 1px solid var(--border-subtle);
+  }
+
+  .tool-code-preview {
+    padding: 8px 11px;
+    background-color: #FAF9F6;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    line-height: 1.45;
+    color: #2F3337;
+    white-space: pre-wrap;
+  }
+
+  /* Pale Red Error Tool Row */
+  .tool-row-error-block {
+    background-color: var(--pale-red-bg);
+    border: 1px solid var(--pale-red-border);
+    border-radius: 2px;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .tool-error-header-row {
+    padding: 7px 11px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    border-bottom: 1px solid #F5D3D1;
+  }
+
+  .error-glyph {
+    color: var(--pale-red-tag);
+    font-weight: 700;
+  }
+
+  .error-code-output-box {
+    padding: 7px 11px;
+    background-color: #FAF0EF;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    line-height: 1.4;
+    color: var(--pale-red-tag);
+  }
+
+  .assistant-inline-followup {
+    font-size: 13px;
+    color: var(--text-body);
+    line-height: 1.45;
+  }
+
+  /* FOOTER STATUS STRIP */
+  .status-footer {
+    height: 32px;
+    min-height: 32px;
+    background-color: var(--bg-bone);
+    border-top: 1px solid var(--border-hairline);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 24px;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    color: var(--text-tertiary);
+  }
+
+  .viewport-spec {
+    color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<div class="viewport-frame">
+  <!-- TOP BAR -->
+  <header class="top-bar">
+    <div class="nav-left">
+      <button class="back-btn">← Sessions</button>
+    </div>
+
+    <div class="brand-group">
+      <span class="brand-title">Pi Meter</span>
+      <span class="live-badge">
+        <span class="live-dot"></span>
+        local · indexer
+      </span>
+    </div>
+
+    <div class="nav-right">
+      <span class="sync-timestamp">Synced 2m ago</span>
+      <button class="refresh-btn">
+        <span class="refresh-icon">↻</span>
+        <span>Refresh</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- MAIN WORKSPACE -->
+  <main class="workspace">
+    
+    <!-- SESSION HEADER -->
+    <section class="session-header">
+      <div class="session-headline-row">
+        <h1 class="session-title">fix: optimize sqlite query indexing for session summary</h1>
+        <span class="session-status-pill">14m 28s</span>
+      </div>
+      <div class="session-meta-breadcrumbs">
+        <span class="meta-cwd">/mount/Data2/syed/coding/pi-meter</span>
+        <span class="meta-sep">/</span>
+        <span>ses_01j9x7k42m</span>
+        <span class="meta-sep">·</span>
+        <span>Oct 22, 08:14:02</span>
+        <span class="meta-sep">·</span>
+        <span>JSONL (48.2 KB)</span>
+      </div>
+    </section>
+
+    <!-- TWO-COLUMN METRICS GRID -->
+    <section class="cost-metrics-grid">
+      <!-- LEFT TILE: TOTAL COST (SERIF) -->
+      <div class="metric-tile">
+        <div class="tile-label">
+          <span>Session Cost</span>
+          <span class="mono" style="font-size: 10px; font-weight: 500; color: var(--text-tertiary);">USD</span>
+        </div>
+        
+        <div class="serif-total-amount">
+          <span class="serif-currency-symbol">$</span>0.0482
+        </div>
+
+        <div class="cost-components-list">
+          <div class="cost-item">
+            <span class="cost-item-name">Input Cost</span>
+            <span class="cost-item-val">$0.0115</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-item-name">Output Cost</span>
+            <span class="cost-item-val">$0.0235</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-item-name">Cache Read</span>
+            <span class="cost-item-val">$0.0132</span>
+          </div>
+          <div class="cost-item">
+            <span class="cost-item-name">Cache Write</span>
+            <span class="cost-item-val">$0.0000</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT TILE: SESSION METRICS -->
+      <div class="metric-tile">
+        <div class="tile-label">
+          <span>Session Dimensions</span>
+          <span class="mono" style="font-size: 10px; font-weight: 500; color: var(--text-tertiary);">68,032 tok</span>
+        </div>
+
+        <div class="metric-stats-stack">
+          <div class="metric-keyval-row">
+            <span class="key-title">Input / Output Tokens</span>
+            <span class="val-figure">38,450 / 3,142</span>
+          </div>
+          <div class="metric-keyval-row">
+            <span class="key-title">Cache Read Volume</span>
+            <span class="val-figure">
+              26,400 tok
+              <span class="cache-pct-tag">38.8%</span>
+            </span>
+          </div>
+          <div class="metric-keyval-row">
+            <span class="key-title">Reasoning Tokens</span>
+            <span class="val-figure">1,280 tok</span>
+          </div>
+          <div class="metric-keyval-row">
+            <span class="key-title">Primary Model</span>
+            <span class="val-figure mono" style="font-size: 11px;">claude-3-7-sonnet</span>
+          </div>
+          <div class="metric-keyval-row">
+            <span class="key-title">Turns &amp; Tool Calls</span>
+            <span class="val-figure">4 turns · 3 tools (1 err)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TIMELINE SECTION CONTROLS -->
+    <div class="timeline-header-bar">
+      <div class="timeline-title-wrap">
+        <span class="timeline-title">Conversation Timeline</span>
+        <span class="timeline-badge">4 entries</span>
+      </div>
+      <div class="timeline-filter-buttons">
+        <button class="filter-btn">Expand All</button>
+        <button class="filter-btn">Collapse Tools</button>
+        <button class="filter-btn filter-btn-error">Errors (1)</button>
+      </div>
+    </div>
+
+    <!-- CONVERSATION TIMELINE ENTRIES -->
+    <div class="timeline-container">
+      
+      <!-- 1. SYSTEM METADATA (Pale Yellow) -->
+      <div class="turn-system-meta">
+        <div>
+          <span class="system-pill">SYSTEM</span>
+          <span>SESSION INIT · MODEL claude-3-7-sonnet · THINKING: HIGH</span>
+        </div>
+        <span class="system-timestamp">08:14:02</span>
+      </div>
+
+      <!-- 2. USER MESSAGE (Pale Blue) -->
+      <div class="turn-user-box">
+        <div class="turn-header">
+          <span class="role-indicator role-user">User</span>
+          <span class="turn-timestamp">08:14:05</span>
+        </div>
+        <div class="turn-body">
+          Let's add a composite index on <code>sessions(last_activity_at, cost_total_micro)</code> and verify query latency on the dashboard endpoint. Run pytest to ensure migrations execute cleanly.
+        </div>
+      </div>
+
+      <!-- 3. ASSISTANT MESSAGE & TOOL EXECUTIONS (Pale Lavender) -->
+      <div class="turn-assistant-box">
+        <div class="turn-header">
+          <span class="role-indicator role-assistant">Assistant</span>
+          <div class="assistant-stats-bar">
+            <span class="model-tag">claude-3-7-sonnet</span>
+            <span>1,420 ms</span>
+            <span>740 tok · $0.0048</span>
+            <span class="turn-timestamp">08:14:19</span>
+          </div>
+        </div>
+
+        <div class="turn-body turn-body-assistant">
+          I will inspect the existing database schema in <code>db/schema.py</code> to verify existing index definitions, apply the composite index, and run the test suite.
+        </div>
+
+        <!-- STACKED TOOL CALL ROWS -->
+        <div class="tool-execution-group">
+          
+          <!-- Tool 1: Collapsed Row -->
+          <div class="tool-row-flat">
+            <div class="tool-row-main">
+              <span class="chevron-icon">▶</span>
+              <span class="tool-badge">read_file</span>
+              <span class="tool-filepath">path: db/schema.py · lines 42–88 (47 lines)</span>
+            </div>
+            <div class="tool-meta-aside">
+              <span class="exec-duration">18ms</span>
+              <button class="expand-pill-btn">+ Expand</button>
+            </div>
+          </div>
+
+          <!-- Tool 2: Expanded Output Row -->
+          <div class="tool-row-expanded-block">
+            <div class="tool-expanded-header">
+              <div class="tool-row-main">
+                <span class="chevron-icon" style="color: #2F9444;">▼</span>
+                <span class="tool-badge">run_command</span>
+                <span class="tool-filepath">pytest tests/test_indexer.py -q</span>
+              </div>
+              <div class="tool-meta-aside">
+                <span class="exec-duration" style="color: #2F9444; font-weight: 500;">exit 0 · 1.12s</span>
+                <button class="expand-pill-btn">– Fold</button>
+              </div>
+            </div>
+            <div class="tool-code-preview">tests/test_indexer.py ................                                     [100%]
+16 passed, 0 warnings in 1.12s (SQLite index verified on 42 session fixtures)</div>
+          </div>
+
+          <!-- Tool 3: Error State Row (Pale Red) -->
+          <div class="tool-row-error-block">
+            <div class="tool-error-header-row">
+              <div class="tool-row-main">
+                <span class="error-glyph">✖</span>
+                <span class="tool-badge" style="background: #F8DCDA; color: var(--pale-red-tag);">run_command</span>
+                <span class="tool-filepath" style="color: var(--pale-red-tag); font-weight: 500;">sqlite3 ~/.pi/agent/cache.db "ANALYZE;"</span>
+              </div>
+              <div class="tool-meta-aside">
+                <span class="exec-duration" style="color: var(--pale-red-tag); font-weight: 600;">exit 14 (EACCES)</span>
+                <button class="expand-pill-btn" style="background: #FBE6E5; border-color: var(--pale-red-border); color: var(--pale-red-tag);">– Details</button>
+              </div>
+            </div>
+            <div class="error-code-output-box">Error: unable to open database file: /home/syed/.pi/agent/cache.db
+sqlite3: Disk I/O error or permission denied (check process file descriptor limits)</div>
+          </div>
+
+        </div>
+
+        <div class="assistant-inline-followup">
+          The global cache path at <code>~/.pi/agent/cache.db</code> encountered a permission lock. I will fallback to the local session database <code>./meter.db</code> which has active read/write permissions.
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+  <!-- FOOTER STATUS STRIP -->
+  <footer class="status-footer">
+    <div>Pi Meter v0.1.0-alpha · SQLite engine (WAL mode)</div>
+    <div class="viewport-spec">Viewport: 780 × 1100 · Portrait Mode</div>
+  </footer>
+</div>
+
+</body>
+</html>

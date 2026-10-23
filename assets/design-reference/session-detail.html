@@ -1,0 +1,2098 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pi Meter — Desktop Session Detail (1440x1100 UI Design Reference)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700&family=Geist+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    /* -------------------------------------------------------------
+       PI METER DESIGN SYSTEM SPECIFICATION
+       Style: Utilitarian Minimalism & Editorial Developer Tool
+       Palette: Warm Off-White (#F7F6F3), Flat White (#FFFFFF), Charcoal
+       Borders: Hairline (1px solid #E6E4DF)
+       Corners: Crisp 8px / 6px / 4px
+       Prohibitions: No Gradients, No Heavy Shadows, No Glassmorphism, No Emojis
+    -------------------------------------------------------------- */
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      /* Backgrounds */
+      --bg-canvas: #F7F6F3;
+      --bg-surface: #FFFFFF;
+      --bg-subtle: #F0EEE8;
+      --bg-muted: #E8E5DC;
+      --bg-hover: #EFECE5;
+
+      /* Hairline Borders */
+      --border-hairline: #E6E4DF;
+      --border-subtle: #DBD7CE;
+      --border-strong: #C4BFB4;
+
+      /* Charcoal Typography */
+      --text-primary: #1A1918;
+      --text-secondary: #5A5752;
+      --text-muted: #88847D;
+      --text-faint: #B0ACA3;
+
+      /* Semantic Event Edge Accents */
+      --edge-user: #60A5FA;
+      --badge-user-bg: #EFF6FF;
+      --badge-user-border: #DBEAFE;
+      --badge-user-text: #1E40AF;
+
+      --edge-assistant: #A78BFA;
+      --badge-assistant-bg: #F5F3FF;
+      --badge-assistant-border: #EDE9FE;
+      --badge-assistant-text: #5B21B6;
+
+      --edge-error: #F87171;
+      --badge-error-bg: #FEF2F2;
+      --badge-error-border: #FEE2E2;
+      --badge-error-text: #991B1B;
+
+      --edge-system: #78716C;
+      --badge-system-bg: #F5F5F4;
+      --badge-system-border: #E7E5E4;
+      --badge-system-text: #44403C;
+
+      --badge-tool-bg: #F4F3EF;
+      --badge-tool-border: #E5E3DB;
+      --badge-tool-text: #45423D;
+
+      --badge-success-bg: #F0FDF4;
+      --badge-success-border: #DCFCE7;
+      --badge-success-text: #166534;
+
+      /* Typography & Metrics */
+      --font-sans: 'Geist', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      --font-mono: 'Geist Mono', "SF Mono", Monaco, "Cascadia Code", Consolas, monospace;
+      
+      --radius-sm: 4px;
+      --radius-md: 6px;
+      --radius-base: 8px;
+    }
+
+    body {
+      background-color: #E9E7E1;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      margin: 0;
+      padding: 16px 0 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-width: 1460px;
+    }
+
+    /* Meta Spec Header above frame */
+    .viewport-meta {
+      width: 1440px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 11px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+    }
+
+    .meta-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .meta-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 7px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      font-weight: 500;
+    }
+
+    .status-dot-green {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #16A34A;
+      display: inline-block;
+    }
+
+    /* -------------------------------------------------------------
+       EXACT 1440 x 1100 NATIVE APPLICATION FRAME
+    -------------------------------------------------------------- */
+    .app-frame {
+      width: 1440px;
+      height: 1100px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* TOP APPLICATION HEADER (38px) */
+    .app-topbar {
+      height: 38px;
+      background: var(--bg-canvas);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 14px;
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    .topbar-left {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .window-pips {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .pip {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-subtle);
+    }
+
+    .topbar-nav-path {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      color: var(--text-secondary);
+    }
+
+    .brand-mark-group {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .pi-symbol-badge {
+      width: 17px;
+      height: 17px;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      background: var(--bg-surface);
+      font-family: var(--font-mono);
+      font-size: 12px;
+      font-weight: 700;
+      line-height: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--text-primary);
+    }
+
+    .path-sep {
+      color: var(--text-faint);
+    }
+
+    .session-id-tag {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-primary);
+    }
+
+    .topbar-center {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--text-secondary);
+    }
+
+    .sync-status-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 7px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+    }
+
+    .topbar-right {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .topbar-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      height: 24px;
+      padding: 0 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .topbar-action-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    .cmd-icon {
+      width: 10px;
+      height: 10px;
+      stroke: currentColor;
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .kbd-shortcut {
+      display: inline-flex;
+      align-items: center;
+      gap: 2px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      padding: 1px 4px;
+      border-radius: 3px;
+      line-height: 1;
+    }
+
+    /* -------------------------------------------------------------
+       WORKSPACE THREE-COLUMN LAYOUT (Height: 1062px)
+       Col 1: Left Rail (240px)
+       Col 2: Main Transcript (860px)
+       Col 3: Right Sticky Totals (340px)
+       240 + 860 + 340 = 1440px
+    -------------------------------------------------------------- */
+    .app-workspace {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 240px 1fr 340px;
+      height: calc(1100px - 38px);
+      overflow: hidden;
+    }
+
+    /* 1. LEFT RAIL NAVIGATION */
+    .left-rail {
+      background: var(--bg-canvas);
+      border-right: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 12px 10px;
+      overflow-y: auto;
+    }
+
+    .rail-group {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .rail-heading {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      padding: 5px 8px 2px;
+    }
+
+    .rail-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 8px;
+      border-radius: var(--radius-md);
+      font-size: 12px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .rail-link:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .rail-link.active {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .rail-link-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .rail-icon {
+      width: 13px;
+      height: 13px;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      fill: none;
+    }
+
+    .recent-sessions-box {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      margin-top: 2px;
+    }
+
+    .recent-item {
+      display: flex;
+      flex-direction: column;
+      padding: 5px 8px;
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      gap: 1px;
+      cursor: pointer;
+    }
+
+    .recent-item:hover {
+      background: var(--bg-subtle);
+    }
+
+    .recent-item.active {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+    }
+
+    .recent-title {
+      font-size: 11.5px;
+      font-weight: 500;
+      color: var(--text-primary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .recent-meta-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .rail-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      padding-top: 8px;
+      border-top: 1px solid var(--border-hairline);
+    }
+
+    .local-index-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 7px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .local-index-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .local-index-path {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .local-index-chips {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-muted);
+      padding-top: 1px;
+    }
+
+    /* 2. CENTER TRANSCRIPT VIEWPORT */
+    .transcript-viewport {
+      background: var(--bg-canvas);
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      scroll-behavior: smooth;
+    }
+
+    /* SESSION HEADER (Restrained, Editorial, Compact) */
+    .session-header {
+      padding: 10px 20px 8px;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      flex-direction: column;
+      gap: 7px;
+      background: var(--bg-canvas);
+      flex-shrink: 0;
+    }
+
+    .header-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      text-decoration: none;
+    }
+
+    .back-link:hover {
+      color: var(--text-primary);
+    }
+
+    .status-badge-active {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 1px 6px;
+      background: var(--badge-success-bg);
+      border: 1px solid var(--badge-success-border);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--badge-success-text);
+    }
+
+    .session-title-line {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+    }
+
+    .session-main-title {
+      font-size: 18px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    /* Clean Horizontal Metadata Row */
+    .session-metadata-bar {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      font-family: var(--font-mono);
+      flex-wrap: nowrap;
+      overflow-x: auto;
+    }
+
+    .project-path-tag {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 1px 5px;
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .meta-time-point strong {
+      color: var(--text-primary);
+      font-weight: 500;
+    }
+
+    .model-id-pill {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 1px 5px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* COMPACT COST SUMMARY STRIP (Flat White, Hairline Borders, 6 Metrics) */
+    .cost-summary-strip {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      display: grid;
+      grid-template-columns: 1.25fr 1fr 1fr 1fr 1fr 1.05fr;
+      overflow: hidden;
+    }
+
+    .strip-cell {
+      padding: 6px 9px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      border-right: 1px solid var(--border-hairline);
+    }
+
+    .strip-cell:last-child {
+      border-right: none;
+    }
+
+    .strip-label {
+      font-size: 9px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .strip-metric-val {
+      font-family: var(--font-mono);
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--text-primary);
+      letter-spacing: -0.01em;
+    }
+
+    .strip-metric-val.lead-cost {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    .strip-sub-text {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-muted);
+    }
+
+    /* TIMELINE CONTROLS BAR (Sticky, 32px) */
+    .timeline-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: var(--bg-canvas);
+      border-bottom: 1px solid var(--border-hairline);
+      padding: 5px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .toolbar-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex: 1;
+    }
+
+    .search-box-wrap {
+      position: relative;
+      width: 220px;
+    }
+
+    .search-input-field {
+      width: 100%;
+      height: 24px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      padding: 0 42px 0 22px;
+      font-size: 11px;
+      font-family: var(--font-sans);
+      color: var(--text-primary);
+      outline: none;
+    }
+
+    .search-input-field:focus {
+      border-color: var(--border-strong);
+    }
+
+    .search-svg-icon {
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      width: 12px;
+      height: 12px;
+      stroke: var(--text-muted);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .search-kbd-pill {
+      position: absolute;
+      right: 4px;
+      top: 3px;
+      font-family: var(--font-mono);
+      font-size: 9px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 3px;
+      padding: 1px 3px;
+      color: var(--text-muted);
+    }
+
+    .filter-tabs {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+    }
+
+    .filter-tab-btn {
+      padding: 2px 6px;
+      font-size: 10px;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      background: transparent;
+      border: 1px solid transparent;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .filter-tab-btn:hover {
+      background: var(--bg-subtle);
+      color: var(--text-primary);
+    }
+
+    .filter-tab-btn.active {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .tool-action-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      height: 22px;
+      padding: 0 7px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      font-size: 10.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .tool-action-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* TIMELINE STREAM & EVENT CARDS */
+    .timeline-stream {
+      padding: 10px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      position: relative;
+    }
+
+    /* Hairline Vertical Guide */
+    .timeline-stream::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      bottom: 24px;
+      left: 28px;
+      width: 1px;
+      background: var(--border-hairline);
+      z-index: 0;
+    }
+
+    .stream-entry {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    /* 1. USER MESSAGE (Pale blue edge accent) */
+    .card-user-message {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-left: 3px solid var(--edge-user);
+      border-radius: var(--radius-base);
+      overflow: hidden;
+    }
+
+    .card-header-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 5px 9px;
+      border-bottom: 1px solid var(--border-hairline);
+      background: #FAFAF8;
+    }
+
+    .header-badge-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .role-badge {
+      font-size: 9.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding: 1px 5px;
+      border-radius: var(--radius-sm);
+    }
+
+    .role-badge.user {
+      background: var(--badge-user-bg);
+      border: 1px solid var(--badge-user-border);
+      color: var(--badge-user-text);
+    }
+
+    .role-badge.assistant {
+      background: var(--badge-assistant-bg);
+      border: 1px solid var(--badge-assistant-border);
+      color: var(--badge-assistant-text);
+    }
+
+    .entry-clock {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .header-telemetry-meta {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-muted);
+    }
+
+    .message-content {
+      padding: 7px 10px;
+      font-size: 12px;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .message-content p {
+      margin-bottom: 4px;
+    }
+
+    .message-content p:last-child {
+      margin-bottom: 0;
+    }
+
+    .code-inline {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 3px;
+      padding: 1px 4px;
+      color: var(--text-primary);
+    }
+
+    /* 2. ASSISTANT MESSAGE (Pale lavender edge accent) */
+    .card-assistant-message {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-left: 3px solid var(--edge-assistant);
+      border-radius: var(--radius-base);
+      overflow: hidden;
+    }
+
+    /* Collapsible Thinking Process Box */
+    .thinking-accordion {
+      margin: 4px 8px 2px;
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .thinking-summary-bar {
+      padding: 3px 7px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--bg-subtle);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .thinking-title-row {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .chevron-icon {
+      width: 9px;
+      height: 9px;
+      stroke: var(--text-secondary);
+      stroke-width: 2;
+      fill: none;
+    }
+
+    .thinking-details {
+      padding: 5px 7px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+      line-height: 1.35;
+      border-top: 1px solid var(--border-hairline);
+      background: #FAF9F6;
+    }
+
+    /* Code Snippet Box inside Assistant */
+    .embedded-code-frame {
+      margin: 4px 0 2px;
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      background: #FAF9F7;
+      overflow: hidden;
+    }
+
+    .code-frame-header {
+      padding: 2px 7px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-secondary);
+    }
+
+    .code-pre-tag {
+      padding: 5px 7px;
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: #1F2937;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* 3. TOOL CALL ENTRY (Monospace Block) */
+    .tool-call-card {
+      margin-left: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    .tool-header-row {
+      padding: 4px 8px;
+      background: #FAF9F6;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+
+    .tool-name-tag {
+      padding: 1px 4px;
+      background: var(--badge-tool-bg);
+      border: 1px solid var(--badge-tool-border);
+      border-radius: 3px;
+      font-weight: 600;
+      color: var(--badge-tool-text);
+      font-size: 9px;
+    }
+
+    .tool-signature-text {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .tool-params-text {
+      color: var(--text-secondary);
+    }
+
+    .tool-body-desc {
+      padding: 4px 8px;
+      font-size: 10.5px;
+      color: var(--text-secondary);
+      background: #FFFFFF;
+    }
+
+    /* 4. TOOL RESULT ENTRY (Collapsed with Visible Control) */
+    .tool-result-card {
+      margin-left: 16px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    .result-header-row {
+      padding: 4px 8px;
+      background: #FAF9F6;
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+
+    .result-badge-success {
+      display: inline-flex;
+      align-items: center;
+      gap: 3px;
+      padding: 1px 4px;
+      background: var(--badge-success-bg);
+      border: 1px solid var(--badge-success-border);
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 9.5px;
+      color: var(--badge-success-text);
+    }
+
+    /* The Prominent Expand Control requested */
+    .expand-result-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 2px 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-sm);
+      font-family: var(--font-mono);
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-primary);
+      cursor: pointer;
+    }
+
+    .expand-result-btn:hover {
+      background: var(--bg-hover);
+      border-color: var(--border-strong);
+    }
+
+    .result-code-box {
+      padding: 5px 8px;
+      font-size: 10px;
+      line-height: 1.35;
+      color: #334155;
+      background: #FAF9F7;
+      max-height: 56px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .tool-line {
+      display: flex;
+      gap: 6px;
+    }
+
+    .tool-ln {
+      width: 20px;
+      text-align: right;
+      color: var(--text-faint);
+      user-select: none;
+      flex-shrink: 0;
+    }
+
+    /* Flat Hairline Status Bar (NO gradients) */
+    .result-flat-end-bar {
+      border-top: 1px dashed var(--border-hairline);
+      background: var(--bg-subtle);
+      padding: 2px 8px;
+      font-size: 9.5px;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* 5. TOOL ERROR ENTRY (Pale red edge accent) */
+    .tool-card-error {
+      margin-left: 16px;
+      background: #FFFDFD;
+      border: 1px solid var(--badge-error-border);
+      border-left: 3px solid var(--edge-error);
+      border-radius: var(--radius-base);
+      overflow: hidden;
+      font-family: var(--font-mono);
+    }
+
+    .error-header-bar {
+      padding: 4px 8px;
+      background: var(--badge-error-bg);
+      border-bottom: 1px solid var(--badge-error-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+    }
+
+    .error-tag-pill {
+      padding: 1px 4px;
+      background: var(--badge-error-bg);
+      border: 1px solid var(--badge-error-border);
+      border-radius: 3px;
+      font-weight: 600;
+      font-size: 9.5px;
+      color: var(--badge-error-text);
+    }
+
+    .error-traceback-body {
+      padding: 4px 8px;
+      font-size: 10px;
+      line-height: 1.35;
+      color: #991B1B;
+      white-space: pre-wrap;
+      background: #FFFDFD;
+    }
+
+    /* 6. MODEL CHANGE SYSTEM EVENT */
+    .system-event-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 1px 0;
+    }
+
+    .model-switch-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 2px 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: 20px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .model-switch-pill strong {
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+
+    /* 7. COMPACTION SYSTEM EVENT */
+    .compaction-card {
+      margin: 1px 8px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-left: 3px solid var(--edge-system);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+    }
+
+    .compaction-header {
+      padding: 4px 7px;
+      background: var(--bg-subtle);
+      border-bottom: 1px solid var(--border-hairline);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--text-secondary);
+    }
+
+    .compaction-header strong {
+      color: var(--text-primary);
+    }
+
+    .compaction-body {
+      padding: 4px 7px;
+      font-size: 10.5px;
+      line-height: 1.35;
+      color: var(--text-secondary);
+    }
+
+    /* 3. RIGHT STICKY 'SESSION TOTALS' COLUMN (340px) */
+    .right-totals-rail {
+      background: var(--bg-canvas);
+      border-left: 1px solid var(--border-hairline);
+      padding: 12px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .totals-top-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--border-hairline);
+    }
+
+    .totals-head-text {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: var(--text-primary);
+    }
+
+    .totals-status-tag {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      padding: 1px 4px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+    }
+
+    /* Primary Cost Box */
+    .anchor-cost-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      padding: 8px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .anchor-label {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .anchor-amount {
+      font-family: var(--font-mono);
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-primary);
+      line-height: 1.1;
+    }
+
+    .anchor-sub-stats {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: var(--text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    /* Stacked Token Distribution Meter */
+    .token-bar-section {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .token-bar-title {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-secondary);
+    }
+
+    .token-meter-strip {
+      height: 6px;
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: 4px;
+      display: flex;
+      overflow: hidden;
+    }
+
+    .meter-slice-input { background: #60A5FA; width: 55%; }
+    .meter-slice-cache { background: #34D399; width: 32%; }
+    .meter-slice-output { background: #A78BFA; width: 9%; }
+    .meter-slice-reasoning { background: #F59E0B; width: 4%; }
+
+    /* Breakdown Table */
+    .totals-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .panel-header {
+      font-size: 9.5px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+    }
+
+    .kv-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      padding: 5px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .breakdown-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+      padding: 1px 0;
+    }
+
+    .legend-indicator {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      color: var(--text-secondary);
+    }
+
+    .dot-chip {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+    }
+
+    .token-qty {
+      font-family: var(--font-mono);
+      color: var(--text-muted);
+      font-size: 10px;
+    }
+
+    .cost-qty {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--text-primary);
+      font-size: 10.5px;
+    }
+
+    /* Cache Efficiency Banner */
+    .cache-metric-banner {
+      background: #F0FDF4;
+      border: 1px solid #DCFCE7;
+      border-radius: var(--radius-md);
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+    }
+
+    .cache-banner-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10px;
+      font-weight: 600;
+      color: #166534;
+    }
+
+    .cache-banner-sub {
+      font-family: var(--font-mono);
+      font-size: 9.5px;
+      color: #15803D;
+    }
+
+    /* Telemetry Key-Value Pairs */
+    .telemetry-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 10.5px;
+    }
+
+    .telemetry-k {
+      color: var(--text-secondary);
+    }
+
+    .telemetry-v {
+      font-family: var(--font-mono);
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+
+    /* Source JSONL Info */
+    .source-jsonl-box {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-base);
+      padding: 6px 8px;
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+
+    .source-path-code {
+      font-family: var(--font-mono);
+      font-size: 9px;
+      color: var(--text-primary);
+      background: var(--bg-subtle);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: 2px 4px;
+      word-break: break-all;
+    }
+
+    .source-btn-row {
+      display: flex;
+      gap: 4px;
+      margin-top: 1px;
+    }
+
+    .sub-action-btn {
+      flex: 1;
+      height: 20px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      font-size: 9.5px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      cursor: pointer;
+    }
+
+    .sub-action-btn:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+
+    /* Minimal Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 5px;
+      height: 5px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #DBD7CE;
+      border-radius: 3px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #BFBAB0;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Meta spec bar -->
+<div class="viewport-meta">
+  <div class="meta-group">
+    <span class="meta-pill"><span class="status-dot-green"></span> PI METER LOCAL ANALYTICS</span>
+    <span>Desktop Session Detail &middot; Viewport 1440&times;1100</span>
+  </div>
+  <div class="meta-group">
+    <span class="meta-pill">THEME: WARM OFF-WHITE #F7F6F3</span>
+    <span class="meta-pill">HAIRLINE BORDERS &middot; 8PX CORNERS &middot; NO GRADIENTS</span>
+  </div>
+</div>
+
+<!-- APPLICATION FRAME (1440 x 1100) -->
+<div class="app-frame" id="pi-app-frame">
+  
+  <!-- 1. TOP WINDOW BAR (38px) -->
+  <header class="app-topbar">
+    <div class="topbar-left">
+      <div class="window-pips">
+        <div class="pip"></div>
+        <div class="pip"></div>
+        <div class="pip"></div>
+      </div>
+      <div class="topbar-nav-path">
+        <div class="brand-mark-group">
+          <span class="pi-symbol-badge">&pi;</span>
+          <span>Pi Meter</span>
+        </div>
+        <span class="path-sep">/</span>
+        <span>sessions</span>
+        <span class="path-sep">/</span>
+        <span class="session-id-tag">sess_01HXYZ948M</span>
+      </div>
+    </div>
+
+    <div class="topbar-center">
+      <div class="sync-status-indicator">
+        <span class="status-dot-green"></span>
+        <span>SQLite 3.42 Index: 14 sessions &middot; ~/.pi/agent/sessions</span>
+      </div>
+    </div>
+
+    <div class="topbar-right">
+      <button class="topbar-action-btn">
+        <span>Search</span>
+        <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>K</span>
+      </button>
+      <button class="topbar-action-btn">
+        <span>Refresh</span>
+        <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>R</span>
+      </button>
+      <span class="kbd-shortcut" style="color: var(--text-secondary); font-size: 10px;">v0.4.2</span>
+    </div>
+  </header>
+
+  <!-- 2. MAIN THREE-COLUMN WORKSPACE -->
+  <div class="app-workspace">
+    
+    <!-- LEFT RAIL (240px) -->
+    <aside class="left-rail">
+      <div class="rail-group">
+        <div class="rail-heading">Navigation</div>
+        <a class="rail-link">
+          <span class="rail-link-label">
+            <svg class="rail-icon" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            Dashboard
+          </span>
+          <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>1</span>
+        </a>
+        <a class="rail-link active">
+          <span class="rail-link-label">
+            <svg class="rail-icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+            Sessions
+          </span>
+          <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>2</span>
+        </a>
+        <a class="rail-link">
+          <span class="rail-link-label">
+            <svg class="rail-icon" viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            Models &amp; Cost
+          </span>
+          <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>3</span>
+        </a>
+        <a class="rail-link">
+          <span class="rail-link-label">
+            <svg class="rail-icon" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
+            Projects
+          </span>
+          <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>4</span>
+        </a>
+        <a class="rail-link">
+          <span class="rail-link-label">
+            <svg class="rail-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+            Settings
+          </span>
+          <span class="kbd-shortcut"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>,</span>
+        </a>
+
+        <div class="rail-heading" style="margin-top: 8px;">Recent Sessions</div>
+        <div class="recent-sessions-box">
+          <div class="recent-item active">
+            <span class="recent-title">Build the usage dashboard</span>
+            <div class="recent-meta-row">
+              <span>pi-meter</span>
+              <span>$0.43</span>
+            </div>
+          </div>
+          <div class="recent-item">
+            <span class="recent-title">FastAPI SQLite sync index</span>
+            <div class="recent-meta-row">
+              <span>pi-meter</span>
+              <span>$0.28</span>
+            </div>
+          </div>
+          <div class="recent-item">
+            <span class="recent-title">Pydantic v2 token serializers</span>
+            <div class="recent-meta-row">
+              <span>pi-meter</span>
+              <span>$0.15</span>
+            </div>
+          </div>
+          <div class="recent-item">
+            <span class="recent-title">Context compaction benchmark</span>
+            <div class="recent-meta-row">
+              <span>core-agent</span>
+              <span>$0.61</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="rail-footer">
+        <div class="local-index-card">
+          <div class="local-index-header">
+            <span>Local Sync</span>
+            <span style="color: #16A34A;">Online</span>
+          </div>
+          <div class="local-index-path">/mount/Data2/syed/coding/pi-meter</div>
+          <div class="local-index-chips">
+            <span>SQLite 3.42</span>
+            <span>&middot;</span>
+            <span>18.4 MB</span>
+            <span>&middot;</span>
+            <span>:7340</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CENTER TRANSCRIPT VIEWPORT (860px) -->
+    <main class="transcript-viewport">
+      
+      <!-- SESSION HEADER -->
+      <header class="session-header">
+        <div class="header-top-row">
+          <a href="#" class="back-link">&larr; Back to Sessions</a>
+          <span class="status-badge-active"><span class="status-dot-green"></span> Active Session</span>
+        </div>
+
+        <div class="session-title-line">
+          <h1 class="session-main-title">Build the usage dashboard</h1>
+        </div>
+
+        <!-- Metadata row -->
+        <div class="session-metadata-bar">
+          <span class="project-path-tag">/mount/Data2/syed/coding/pi-meter</span>
+          <span>&middot;</span>
+          <span class="meta-time-point">Started <strong>Oct 22, 2026 &middot; 09:14:22</strong></span>
+          <span>&middot;</span>
+          <span class="meta-time-point">Last activity <strong>4m ago (09:48:02)</strong></span>
+          <span>&middot;</span>
+          <span class="meta-time-point">Duration <strong>33m 40s</strong></span>
+          <span>&middot;</span>
+          <span class="model-id-pill">claude-3-7-sonnet-thought</span>
+        </div>
+
+        <!-- COMPACT COST SUMMARY STRIP (Total Cost, Input, Output, Reasoning, Cache Read, Cache Write) -->
+        <div class="cost-summary-strip">
+          <div class="strip-cell">
+            <span class="strip-label">Total Cost</span>
+            <span class="strip-metric-val lead-cost">$0.4289</span>
+            <span class="strip-sub-text">155,260 tokens</span>
+          </div>
+          <div class="strip-cell">
+            <span class="strip-label">Input</span>
+            <span class="strip-metric-val">142,850</span>
+            <span class="strip-sub-text">$0.1428</span>
+          </div>
+          <div class="strip-cell">
+            <span class="strip-label">Output</span>
+            <span class="strip-metric-val">12,410</span>
+            <span class="strip-sub-text">$0.1861</span>
+          </div>
+          <div class="strip-cell">
+            <span class="strip-label">Reasoning</span>
+            <span class="strip-metric-val">6,820</span>
+            <span class="strip-sub-text">55.0% output</span>
+          </div>
+          <div class="strip-cell">
+            <span class="strip-label">Cache Read</span>
+            <span class="strip-metric-val">98,200</span>
+            <span class="strip-sub-text">80.3% hit ($0.0245)</span>
+          </div>
+          <div class="strip-cell">
+            <span class="strip-label">Cache Write</span>
+            <span class="strip-metric-val">24,100</span>
+            <span class="strip-sub-text">Created ($0.0755)</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- TIMELINE CONTROLS BAR -->
+      <div class="timeline-toolbar">
+        <div class="toolbar-left">
+          <div class="search-box-wrap">
+            <svg class="search-svg-icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            <input type="text" class="search-input-field" placeholder="Search transcript..." value="FastAPI">
+            <span class="search-kbd-pill"><svg class="cmd-icon" viewBox="0 0 24 24"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>F</span>
+          </div>
+          <div class="filter-tabs">
+            <button class="filter-tab-btn active">All (18)</button>
+            <button class="filter-tab-btn">User (4)</button>
+            <button class="filter-tab-btn">Assistant (4)</button>
+            <button class="filter-tab-btn">Tools (8)</button>
+            <button class="filter-tab-btn">Errors (1)</button>
+          </div>
+        </div>
+
+        <div class="toolbar-right">
+          <button class="tool-action-btn" id="btn-expand-all">
+            <span>Expand all</span>
+          </button>
+          <button class="tool-action-btn" id="btn-collapse-all">
+            <span>Collapse all</span>
+          </button>
+          <button class="tool-action-btn">
+            <span>&darr; Latest</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- VERTICAL CONVERSATION TIMELINE (ALL 7 DISTINCT EVENT STYLES) -->
+      <div class="timeline-stream">
+        
+        <!-- 1. USER MESSAGE (Pale blue edge accent) -->
+        <div class="stream-entry">
+          <div class="card-user-message">
+            <div class="card-header-bar">
+              <div class="header-badge-group">
+                <span class="role-badge user">User</span>
+                <span class="entry-clock">09:14:22</span>
+              </div>
+              <div class="header-telemetry-meta">
+                <span>Entry #1</span>
+                <span>&middot;</span>
+                <span>412 tokens</span>
+              </div>
+            </div>
+            <div class="message-content">
+              <p>We need to implement the backend session aggregation endpoint in <strong>FastAPI</strong> for Pi Meter. Let's create <span class="code-inline">GET /api/sessions/{session_id}</span> in <span class="code-inline">backend/app/routers/sessions.py</span>.</p>
+              <p>It needs to read from the local <strong>SQLite</strong> database using SQLAlchemy 2.0 async session, return parsed metadata, token breakdown (input, output, reasoning, cache read/write), and integer micro-dollar cost. Also provide the corresponding <strong>React</strong> TypeScript hook <span class="code-inline">useSessionDetail(sessionId)</span> with strict types.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- 2. ASSISTANT MESSAGE (Pale lavender edge accent) -->
+        <div class="stream-entry">
+          <div class="card-assistant-message">
+            <div class="card-header-bar">
+              <div class="header-badge-group">
+                <span class="role-badge assistant">Assistant</span>
+                <span class="model-id-pill" style="font-size: 9.5px; padding: 1px 5px;">claude-3-7-sonnet-thought</span>
+                <span class="entry-clock">09:14:38</span>
+              </div>
+              <div class="header-telemetry-meta">
+                <span>3.8s</span>
+                <span>&middot;</span>
+                <span>1,420 tok</span>
+                <span>&middot;</span>
+                <span>$0.0242</span>
+              </div>
+            </div>
+
+            <!-- Thinking accordion -->
+            <div class="thinking-accordion">
+              <div class="thinking-summary-bar" onclick="toggleThinking()">
+                <div class="thinking-title-row">
+                  <svg class="chevron-icon" id="think-chev" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                  <span>Thinking Process &middot; 6,820 reasoning tokens</span>
+                </div>
+                <span>3.2s elapsed</span>
+              </div>
+              <div class="thinking-details" id="think-body" style="display: none;">
+                1. SQLite currency storage: Cost stored as integer millionths of a dollar (cost_total_micro) eliminates IEEE-754 accumulation errors.<br>
+                2. FastAPI route: SELECT sessions JOIN entries on session_id with async session streaming.
+              </div>
+            </div>
+
+            <div class="message-content">
+              <p>I will define the FastAPI route with SQLAlchemy 2.0 async session and serialize the response using Pydantic schemas:</p>
+
+              <div class="embedded-code-frame">
+                <div class="code-frame-header">
+                  <span>backend/app/routers/sessions.py</span>
+                  <span>python</span>
+                </div>
+                <pre class="code-pre-tag">@router.get("/{session_id}", response_model=SessionDetailResponse)
+async def get_session_detail(session_id: str, db: AsyncSession = Depends(get_db)):
+    stmt = select(SessionRecord).where(SessionRecord.session_id == session_id)
+    session = (await db.execute(stmt)).scalar_one_or_none()
+    return session</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TOOL CALL (Monospace block) -->
+        <div class="stream-entry">
+          <div class="tool-call-card">
+            <div class="tool-header-row">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="tool-name-tag">TOOL CALL</span>
+                <span class="tool-signature-text">write_file</span>
+                <span class="tool-params-text">path="backend/app/routers/sessions.py"</span>
+              </div>
+              <span class="entry-clock">09:15:02</span>
+            </div>
+            <div class="tool-body-desc">
+              Writing 184 lines of FastAPI router and Pydantic v2 schemas to backend/app/routers/sessions.py
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. TOOL RESULT (Monospace, collapsed with visible 'Expand result · 184 lines' control) -->
+        <div class="stream-entry">
+          <div class="tool-result-card">
+            <div class="result-header-row">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="result-badge-success">&check; Exit 0</span>
+                <span style="color: var(--text-secondary);">backend/app/routers/sessions.py &middot; 184 lines (6.4 KB)</span>
+              </div>
+              <!-- Visible Expand Control Required -->
+              <button class="expand-result-btn" id="btn-toggle-result" onclick="toggleResultExpansion()">
+                <svg style="width: 10px; height: 10px; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                <span id="expand-label">Expand result &middot; 184 lines</span>
+              </button>
+            </div>
+
+            <!-- Monospace Code Box Preview -->
+            <div class="result-code-box" id="result-code-box">
+              <div class="tool-line"><span class="tool-ln">1</span><span>"""FastAPI router for Pi Meter session exploration &amp; token analytics."""</span></div>
+              <div class="tool-line"><span class="tool-ln">2</span><span>from fastapi import APIRouter, Depends, HTTPException</span></div>
+              <div class="tool-line"><span class="tool-ln">3</span><span>from sqlalchemy.ext.asyncio import AsyncSession</span></div>
+              <div class="tool-line"><span class="tool-ln">4</span><span>class TokenBreakdownSchema(BaseModel):</span></div>
+            </div>
+            
+            <div class="result-flat-end-bar" id="result-footer-bar">
+              <span>Showing preview (lines 1-4 of 184)</span>
+              <span>Click "Expand result &middot; 184 lines" to view full buffer</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. TOOL ERROR (Pale red edge accent) -->
+        <div class="stream-entry">
+          <div class="tool-card-error">
+            <div class="error-header-bar">
+              <div style="display: flex; align-items: center; gap: 6px;">
+                <span class="error-tag-pill">&cross; TOOL ERROR</span>
+                <span style="font-weight: 600; color: var(--text-primary);">exec_command</span>
+                <span style="color: var(--text-secondary);">cmd="pytest tests/test_sqlite_sync.py -v"</span>
+              </div>
+              <span class="entry-clock">09:18:44</span>
+            </div>
+            <div class="error-traceback-body">FAILED tests/test_sqlite_sync.py::test_session_schema_columns - sqlalchemy.exc.OperationalError:
+(sqlite3.OperationalError) no such column: sessions.cache_write_tokens
+[SQL: SELECT sessions.id, sessions.input_tokens, sessions.cache_write_tokens FROM sessions WHERE sessions.session_id = ?]
+AssertionError: Missing column 'cache_write_tokens' in SQLite sessions table. Apply migration 0003_add_cache_columns.</div>
+          </div>
+        </div>
+
+        <!-- 6. MODEL CHANGE SYSTEM EVENT -->
+        <div class="stream-entry system-event-container">
+          <div class="model-switch-pill">
+            <svg style="width: 11px; height: 11px; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"></path></svg>
+            <span>Model switched: <strong>claude-3-5-haiku</strong> &rarr; <strong>claude-3-7-sonnet-thought</strong></span>
+            <span>&middot;</span>
+            <span>Reasoning budget: 8,192 tokens</span>
+            <span>&middot;</span>
+            <span>09:20:05</span>
+          </div>
+        </div>
+
+        <!-- 7. COMPACTION SYSTEM EVENT -->
+        <div class="stream-entry">
+          <div class="compaction-card">
+            <div class="compaction-header">
+              <div style="display: flex; align-items: center; gap: 5px;">
+                <svg style="width: 11px; height: 11px; stroke: currentColor; fill: none;" viewBox="0 0 24 24"><polyline points="4 14 10 14 10 20"></polyline><polyline points="20 10 14 10 14 4"></polyline></svg>
+                <span><strong>Context compaction</strong> &middot; 68,400 tokens reduced to 2,150 token summary</span>
+              </div>
+              <span>Savings: 96.8% &middot; 09:24:18</span>
+            </div>
+            <div class="compaction-body">
+              Compacted 12 historical test outputs and schema migration logs. Retained: SQLite schema definition for `sessions` and `entries`, active migration revision `0003_add_cache_columns.sql`, and FastAPI dependency injection setup.
+            </div>
+          </div>
+        </div>
+
+        <!-- 8. ASSISTANT RESOLUTION (React Component & Migration Success) -->
+        <div class="stream-entry">
+          <div class="card-assistant-message">
+            <div class="card-header-bar">
+              <div class="header-badge-group">
+                <span class="role-badge assistant">Assistant</span>
+                <span class="model-id-pill" style="font-size: 9.5px; padding: 1px 5px;">claude-3-7-sonnet-thought</span>
+                <span class="entry-clock">09:25:30</span>
+              </div>
+              <div class="header-telemetry-meta">
+                <span>4.1s</span>
+                <span>&middot;</span>
+                <span>1,180 tok</span>
+                <span>&middot;</span>
+                <span>$0.0215</span>
+              </div>
+            </div>
+
+            <div class="message-content">
+              <p>Column <span class="code-inline">cache_write_tokens</span> added via <span class="code-inline">alembic upgrade head</span>. Tests passed. Here is the <strong>React</strong> hook in <span class="code-inline">frontend/src/hooks/useSessionDetail.ts</span>:</p>
+
+              <div class="embedded-code-frame">
+                <div class="code-frame-header">
+                  <span>frontend/src/hooks/useSessionDetail.ts</span>
+                  <span>typescript</span>
+                </div>
+                <pre class="code-pre-tag">import { useQuery } from '@tanstack/react-query';
+
+export function useSessionDetail(sessionId: string) {
+  return useQuery&lt;SessionDetail&gt;({
+    queryKey: ['session', sessionId],
+    queryFn: async () => {
+      const res = await fetch(`/api/sessions/${sessionId}`);
+      if (!res.ok) throw new Error(`HTTP ${res.status}: Failed to load session index`);
+      return res.json();
+    },
+    staleTime: 10_000,
+  });
+}</pre>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </main>
+
+    <!-- 3. RIGHT STICKY 'SESSION TOTALS' COLUMN (340px) -->
+    <aside class="right-totals-rail">
+      <div class="totals-top-title">
+        <span class="totals-head-text">Session Totals</span>
+        <span class="totals-status-tag">REAL-TIME INDEX</span>
+      </div>
+
+      <!-- Primary Cumulative Cost Anchor -->
+      <div class="anchor-cost-card">
+        <span class="anchor-label">Cumulative Cost</span>
+        <div class="anchor-amount">$0.4289</div>
+        <div class="anchor-sub-stats">
+          <span>428,940 &mu;USD</span>
+          <span style="color: #16A34A; font-weight: 500;">&plusmn;0.00% precision</span>
+        </div>
+      </div>
+
+      <!-- Token Distribution Proportional Meter -->
+      <div class="token-bar-section">
+        <div class="token-bar-title">
+          <span>Token Composition</span>
+          <span style="font-family: var(--font-mono); font-size: 10px;">155,260 tok</span>
+        </div>
+        <div class="token-meter-strip">
+          <div class="meter-slice-input" title="Input Tokens: 55%"></div>
+          <div class="meter-slice-cache" title="Cache Read: 32%"></div>
+          <div class="meter-slice-output" title="Output Tokens: 9%"></div>
+          <div class="meter-slice-reasoning" title="Reasoning Tokens: 4%"></div>
+        </div>
+      </div>
+
+      <!-- Breakdown Table -->
+      <div class="totals-panel">
+        <span class="panel-header">Cost &amp; Volume Breakdown</span>
+        <div class="kv-card">
+          <div class="breakdown-row">
+            <div class="legend-indicator">
+              <span class="dot-chip" style="background: #60A5FA;"></span>
+              <span>Input</span>
+            </div>
+            <span class="token-qty">142,850</span>
+            <span class="cost-qty">$0.1428</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="legend-indicator">
+              <span class="dot-chip" style="background: #A78BFA;"></span>
+              <span>Output</span>
+            </div>
+            <span class="token-qty">12,410</span>
+            <span class="cost-qty">$0.1861</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="legend-indicator">
+              <span class="dot-chip" style="background: #F59E0B;"></span>
+              <span>Reasoning</span>
+            </div>
+            <span class="token-qty">6,820</span>
+            <span class="cost-qty">incl.</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="legend-indicator">
+              <span class="dot-chip" style="background: #34D399;"></span>
+              <span>Cache Read</span>
+            </div>
+            <span class="token-qty">98,200</span>
+            <span class="cost-qty">$0.0245</span>
+          </div>
+          <div class="breakdown-row">
+            <div class="legend-indicator">
+              <span class="dot-chip" style="background: #94A3B8;"></span>
+              <span>Cache Write</span>
+            </div>
+            <span class="token-qty">24,100</span>
+            <span class="cost-qty">$0.0755</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Cache Efficiency Banner -->
+      <div class="cache-metric-banner">
+        <div class="cache-banner-top">
+          <span>Cache Hit Rate: 80.3%</span>
+          <span>&check; Optimal</span>
+        </div>
+        <span class="cache-banner-sub">98.2k tokens served from KV cache</span>
+        <span class="cache-banner-sub">Estimated savings: $0.294 (68%)</span>
+      </div>
+
+      <!-- Execution Telemetry -->
+      <div class="totals-panel">
+        <span class="panel-header">Execution Telemetry</span>
+        <div class="kv-card">
+          <div class="telemetry-row">
+            <span class="telemetry-k">Session Duration</span>
+            <span class="telemetry-v">33m 40s</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-k">LLM Generation Time</span>
+            <span class="telemetry-v">42.6s (2.1%)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-k">Peak Context Size</span>
+            <span class="telemetry-v">124,190 / 200k (62%)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-k">Tool Invocations</span>
+            <span class="telemetry-v">14 (12 ok &middot; 1 err)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-k">Context Compactions</span>
+            <span class="telemetry-v">1 event (96.8% saved)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Model Distribution -->
+      <div class="totals-panel">
+        <span class="panel-header">Model Distribution</span>
+        <div class="kv-card">
+          <div class="telemetry-row">
+            <span class="telemetry-k">claude-3-7-sonnet</span>
+            <span class="telemetry-v">91.8% ($0.3938)</span>
+          </div>
+          <div class="telemetry-row">
+            <span class="telemetry-k">claude-3-5-haiku</span>
+            <span class="telemetry-v">8.2% ($0.0351)</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Source JSONL File Details -->
+      <div class="totals-panel">
+        <span class="panel-header">Source File &amp; Index</span>
+        <div class="source-jsonl-box">
+          <div class="source-path-code">~/.pi/agent/sessions/2026-10-22-build-dashboard.jsonl</div>
+          <div class="telemetry-row" style="font-size: 9.5px; margin-top: 1px;">
+            <span class="telemetry-k">File Size: 284.4 KB</span>
+            <span class="telemetry-v">Indexed in 12ms</span>
+          </div>
+          <div class="source-btn-row">
+            <button class="sub-action-btn" onclick="navigator.clipboard.writeText('~/.pi/agent/sessions/2026-10-22-build-dashboard.jsonl')">Copy Path</button>
+            <button class="sub-action-btn">Open Editor</button>
+            <button class="sub-action-btn">Raw JSONL</button>
+          </div>
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+</div>
+
+<script>
+  let isResultExpanded = false;
+
+  function toggleResultExpansion() {
+    const box = document.getElementById('result-code-box');
+    const label = document.getElementById('expand-label');
+    const footer = document.getElementById('result-footer-bar');
+    
+    if (!isResultExpanded) {
+      box.style.maxHeight = '340px';
+      box.style.overflowY = 'auto';
+      label.textContent = 'Collapse result · 184 lines';
+      footer.innerHTML = '<span>Showing all 184 lines of backend/app/routers/sessions.py</span><span>Exit 0</span>';
+      isResultExpanded = true;
+    } else {
+      box.style.maxHeight = '56px';
+      box.style.overflow = 'hidden';
+      label.textContent = 'Expand result · 184 lines';
+      footer.innerHTML = '<span>Showing preview (lines 1-4 of 184)</span><span>Click "Expand result · 184 lines" to view full buffer</span>';
+      isResultExpanded = false;
+    }
+  }
+
+  function toggleThinking() {
+    const body = document.getElementById('think-body');
+    body.style.display = body.style.display === 'none' ? 'block' : 'none';
+  }
+
+  // Expand / Collapse All
+  document.getElementById('btn-expand-all').addEventListener('click', () => {
+    if (!isResultExpanded) toggleResultExpansion();
+    document.getElementById('think-body').style.display = 'block';
+  });
+
+  document.getElementById('btn-collapse-all').addEventListener('click', () => {
+    if (isResultExpanded) toggleResultExpansion();
+    document.getElementById('think-body').style.display = 'none';
+  });
+</script>
+
+</body>
+</html>
