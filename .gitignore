@@ -1,0 +1,34 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+
+# Local data (SQLite is a disposable cache of the Pi JSONL sessions)
+data/*.sqlite
+data/*.sqlite-*
+data/*.db
+data/.refresh.lock
+data/pi-meter.log
+data/pi-meter.pid
+
+# Frontend build output
+frontend/node_modules/
+frontend/dist/
+
+# Local configuration
+.env
+.env.local
+
+# Tooling
+.ruff_cache/
+.pytest_cache/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+frontend/playwright/.cache/
+.DS_Store
