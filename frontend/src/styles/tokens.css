@@ -1,0 +1,250 @@
+/* Pi Meter design tokens.
+   Raw colour values live here and nowhere else.
+   Warm bone canvas, flat white surfaces, charcoal ink, hairline structure. */
+
+:root {
+  color-scheme: light;
+
+  /* Warm neutral ramp */
+  --warm-0: #ffffff;
+  --warm-20: #faf9f6;
+  --warm-50: #f7f6f3;
+  --warm-100: #f1efea;
+  --warm-150: #eceae4;
+  --warm-200: #e8e5dc;
+  --warm-250: #efede7;
+  --warm-300: #e5e3de;
+  --warm-350: #dbd7ce;
+  --warm-400: #c9c5bc;
+  --warm-500: #a8a49b;
+  --warm-600: #8a867f;
+  --warm-700: #6f6b64;
+  --warm-800: #5c5954;
+  --warm-900: #2b2a27;
+  --warm-950: #1a1918;
+
+  /* Surfaces */
+  --color-canvas: var(--warm-50);
+  --color-surface: var(--warm-0);
+  --color-surface-subtle: var(--warm-100);
+  --color-surface-muted: var(--warm-150);
+  --color-surface-sunken: var(--warm-200);
+  --color-surface-hover: var(--warm-20);
+  --color-surface-selected: var(--warm-150);
+  --color-overlay: rgba(26, 25, 24, 0.28);
+
+  /* Borders */
+  --color-border: var(--warm-300);
+  --color-border-subtle: var(--warm-250);
+  --color-border-strong: var(--warm-400);
+  --color-control-border: var(--warm-600);
+  --color-control-border-hover: var(--warm-700);
+  --border-width: 1px;
+  --border-width-strong: 2px;
+  --border-width-edge: 3px;
+  --border-hairline: var(--border-width) solid var(--color-border);
+  --border-subtle: var(--border-width) solid var(--color-border-subtle);
+  --border-control: var(--border-width) solid var(--color-control-border);
+  --border-dashed: var(--border-width) dashed var(--color-border);
+
+  /* Ink */
+  --color-ink: var(--warm-950);
+  --color-ink-body: var(--warm-900);
+  --color-ink-secondary: var(--warm-800);
+  --color-ink-muted: var(--warm-700);
+  --color-ink-faint: var(--warm-500);
+  --color-ink-inverse: var(--warm-0);
+
+  /* Action and interactive accent */
+  --color-action: var(--warm-950);
+  --color-action-hover: #33312d;
+  --color-action-active: #0f0e0d;
+  --color-accent: #3f5e7a;
+  --color-accent-hover: #35536e;
+  --color-accent-subtle: #eef4f9;
+  --color-focus: #3f5e7a;
+  --color-selection: #dce6ef;
+  --color-scrollbar: var(--warm-400);
+  --color-scrollbar-hover: var(--warm-500);
+
+  /* Semantic pastels */
+  --color-user-bg: #eef4f9;
+  --color-user-border: #c8dce8;
+  --color-user-text: #235878;
+  --color-user-edge: #6e9bbf;
+
+  --color-assistant-bg: #f4f0f8;
+  --color-assistant-border: #dcd0e8;
+  --color-assistant-text: #5e3c85;
+  --color-assistant-edge: #9b7fbf;
+
+  --color-tool-bg: #f4f3ef;
+  --color-tool-border: #e5e3db;
+  --color-tool-text: #45423d;
+  --color-tool-edge: #8c8472;
+
+  --color-system-bg: #faf5e5;
+  --color-system-border: #e8ddbc;
+  --color-system-text: #786116;
+  --color-system-edge: #b88e23;
+
+  --color-success-bg: #edf3ec;
+  --color-success-border: #d7e4d3;
+  --color-success-text: #2f6b3a;
+  --color-success-edge: #487a4e;
+
+  --color-warning-bg: #fbf3db;
+  --color-warning-border: #e8ddbc;
+  --color-warning-text: #7a5a12;
+  --color-warning-edge: #b88e23;
+
+  --color-error-bg: #fcedec;
+  --color-error-border: #efcbc8;
+  --color-error-text: #9a2422;
+  --color-error-edge: #c14436;
+
+  --color-info-bg: #eef4f9;
+  --color-info-border: #c8dce8;
+  --color-info-text: #235878;
+  --color-info-edge: #6e9bbf;
+
+  --color-neutral-bg: var(--warm-100);
+  --color-neutral-border: var(--warm-300);
+  --color-neutral-text: var(--warm-800);
+  --color-neutral-edge: var(--warm-600);
+
+  /* Data visualisation */
+  --chart-input: #8c9dae;
+  --chart-output: #2b2a27;
+  --chart-reasoning: #b8a77e;
+  --chart-cache-read: #8fa88a;
+  --chart-cache-write: #c9c2b4;
+  --chart-grid: var(--warm-300);
+  --chart-axis: var(--warm-700);
+  --chart-tooltip-bg: var(--warm-0);
+  --chart-tooltip-border: var(--warm-400);
+  --bar-project-1: #385e38;
+  --bar-project-2: #4a6e91;
+  --bar-project-3: #8c8472;
+  --bar-project-4: #b2584a;
+
+  /* Typography */
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-serif: "Newsreader", Georgia, Cambria, "Times New Roman", serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --text-2xs: 10.5px;
+  --text-xs: 11px;
+  --text-sm: 12px;
+  --text-md: 13.5px;
+  --text-base: 15px;
+  --text-lg: 18px;
+  --text-xl: 22px;
+  --text-2xl: 26px;
+  --text-3xl: 32px;
+  --text-4xl: 40px;
+  --text-5xl: 56px;
+  --text-display: clamp(48px, 5.5vw, 72px);
+
+  --leading-none: 1;
+  --leading-tight: 1.15;
+  --leading-snug: 1.35;
+  --leading-normal: 1.5;
+  --leading-relaxed: 1.6;
+
+  --tracking-tight: -0.03em;
+  --tracking-snug: -0.015em;
+  --tracking-normal: 0;
+  --tracking-wide: 0.06em;
+  --tracking-wider: 0.08em;
+
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 700;
+
+  /* Spacing: 2px base */
+  --space-0: 0px;
+  --space-1: 2px;
+  --space-2: 4px;
+  --space-3: 6px;
+  --space-4: 8px;
+  --space-5: 10px;
+  --space-6: 12px;
+  --space-7: 14px;
+  --space-8: 16px;
+  --space-9: 20px;
+  --space-10: 24px;
+  --space-11: 28px;
+  --space-12: 32px;
+  --space-13: 40px;
+  --space-14: 48px;
+  --space-15: 64px;
+
+  /* Radii */
+  --radius-xs: 3px;
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+  --radius-pill: 9999px;
+
+  /* Layout */
+  --layout-rail: 180px;
+  --layout-rail-collapsed: 64px;
+  --layout-drawer: 280px;
+  --layout-summary: 248px;
+  --layout-right-rail: 320px;
+  --layout-content-max: 1440px;
+  --layout-transcript-max: 960px;
+  --layout-reading-max: 72ch;
+  --layout-gutter: 28px;
+  --layout-gutter-md: 20px;
+  --layout-gutter-sm: 16px;
+  --layout-topbar: 56px;
+  --layout-statusbar: 28px;
+  --layout-control-sm: 28px;
+  --layout-control-md: 32px;
+  --layout-control-lg: 40px;
+  --layout-touch: 44px;
+  --layout-table-header: 36px;
+  --layout-row: 44px;
+  --layout-message-header: 28px;
+  --layout-chart: 260px;
+  --layout-chart-sm: 220px;
+
+  /* Motion */
+  --duration-instant: 0ms;
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 200ms;
+  --duration-route: 120ms;
+  --duration-spinner: 800ms;
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-linear: linear;
+
+  /* Elevation: hairlines only, never heavy shadows */
+  --shadow-none: none;
+  --shadow-hairline: 0 1px 2px rgba(26, 25, 24, 0.03);
+  --shadow-popover: 0 8px 24px rgba(26, 25, 24, 0.045);
+
+  /* Focus */
+  --focus-outline: 2px solid var(--color-focus);
+  --focus-offset: 2px;
+  --focus-ring: 0 0 0 2px var(--color-surface), 0 0 0 4px var(--color-focus);
+
+  /* Z-index */
+  --z-base: 0;
+  --z-sticky: 10;
+  --z-rail: 20;
+  --z-header: 30;
+  --z-backdrop: 40;
+  --z-drawer: 50;
+  --z-popover: 60;
+  --z-toast: 70;
+
+  /* Breakpoints are documentation only; CSS custom properties do not work
+     inside @media. Use the literal values in media queries.
+     sm 480px · md 640px · lg 900px · xl 1200px · 2xl 1440px */
+}
